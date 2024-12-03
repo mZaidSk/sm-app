@@ -1,6 +1,6 @@
 import instance from "./instance";
 
-const url = "chat-api";
+const url = "chat";
 
 export const getChatsByUserIdApi = (userId: string) =>
     instance.get(url + `/${userId}`);

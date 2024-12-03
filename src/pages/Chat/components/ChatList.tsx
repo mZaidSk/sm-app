@@ -1,14 +1,40 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import { RootState } from "@/store/store";
-import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import websocket from "@/services/WebSocketService";
+import { setChats } from "@/store/slice/ChatSocketSlice";
 
 const ChatList = ({ setChatId }: { setChatId: (id: string) => void }) => {
-    const chatSelector = useSelector((state: RootState) => state.chat.chats);
+    // const chatSelector = useSelector(
+    //     (state: RootState) => state?.chat?.chats || []
+    // );
+
+    const dispatch = useDispatch<AppDispatch>();
+    const chatSelector = useSelector(
+        (state: RootState) => state.chat.chats || []
+    );
+
+    // const chatSelector: any[] = [];
+
+    useEffect(() => {
+        // Listen for incoming messages
+        websocket.emit("loadChats", {});
+
+        websocket.on("chatsLoaded", ({ chats }) => {
+            dispatch(setChats(chats));
+            console.log(chatSelector);
+        });
+
+        return () => {
+            websocket.off("chatsLoaded");
+        };
+    }, [dispatch]);
+
     const [searchTerm, setSearchTerm] = useState("");
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -43,12 +69,12 @@ const ChatList = ({ setChatId }: { setChatId: (id: string) => void }) => {
                         chatSelector.map((chat) => (
                             <Card
                                 className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md hover:shadow-lg border border-gray-200 transition-transform transform group-hover:scale-[1.02]"
-                                key={chat.chatId}
-                                onClick={() => setChatId(chat.chatId)} // Set chatId on click
+                                key={chat.id}
+                                onClick={() => setChatId(chat.id)} // Set chatId on click
                             >
                                 {/* Avatar */}
                                 <div className="relative">
-                                    <Avatar className="w-14 h-14 border-2 border-blue-500">
+                                    {/* <Avatar className="w-14 h-14 border-2 border-blue-500">
                                         <AvatarImage
                                             src={
                                                 chat?.participants[0]?.user
@@ -61,14 +87,14 @@ const ChatList = ({ setChatId }: { setChatId: (id: string) => void }) => {
                                                 .charAt(0)
                                                 .toUpperCase()}
                                         </AvatarFallback>
-                                    </Avatar>
+                                    </Avatar> */}
                                     {/* Online Badge */}
                                     <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
                                 </div>
 
                                 {/* Chat Details */}
                                 <div className="flex-1">
-                                    <div className="flex justify-between items-center">
+                                    {/* <div className="flex justify-between items-center">
                                         <h3 className="text-lg font-medium text-gray-800 truncate">
                                             {
                                                 chat?.participants[0]?.user
@@ -83,12 +109,14 @@ const ChatList = ({ setChatId }: { setChatId: (id: string) => void }) => {
                                                 minute: "2-digit",
                                             })}
                                         </span>
-                                    </div>
+                                    </div> */}
                                     <p className="text-sm text-gray-600 truncate">
                                         Last message at{" "}
-                                        {new Date(
-                                            chat.lastMessageAt
-                                        ).toLocaleDateString()}
+                                        {chat.lastMessage
+                                            ? new Date(
+                                                  chat.lastMessage
+                                              ).toLocaleDateString()
+                                            : "idk"}
                                     </p>
                                 </div>
                             </Card>

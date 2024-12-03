@@ -11,3 +11,4 @@ export const registerApi = (payload: registerUserParams,
     instance.post(url + "/register", payload)
 
 export const getLoginUserApi = () => instance.get(url + "/user");
+

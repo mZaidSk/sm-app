@@ -91,10 +91,9 @@ const authSlice = createSlice({
                 (state, action: PayloadAction<any>) => {
                     state.loading = false;
                     state.user = action.payload;
-                    localStorage.setItem(
-                        "token",
-                        action.payload.token
-                    ); // Store token in local storage
+                    localStorage.setItem("token", action.payload.token); // Store token in local storage
+                    localStorage.setItem("userId", action.payload.userId); // Store token in local storage
+                    websocket.connect(action.payload.token);
                 }
             )
             .addCase(
@@ -138,6 +137,7 @@ const authSlice = createSlice({
                     state.loading = false;
                     localStorage.setItem("userId", action.payload.userId);
                     state.user = action.payload;
+                    websocket.disconnect();
                 }
             )
             .addCase(

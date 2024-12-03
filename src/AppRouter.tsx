@@ -13,6 +13,7 @@ function AppRouter() {
     const [auth, setAuth] = useState(false);
     const authSelector = useSelector((state: RootState) => state.auth);
 
+
     // useEffect(() => {
     //     const checkAuth = async () => {
     //         const token = localStorage.getItem("accessToken");
