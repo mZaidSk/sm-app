@@ -15,6 +15,12 @@ const store = configureStore({
     },
 });
 
+
+// login /user -> auth.user
+
+
+// profile user info if store user: user data show else dispach(getloginuser)
+
 // Infer the `RootState` and `AppDispatch` types
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

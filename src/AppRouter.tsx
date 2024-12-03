@@ -7,18 +7,20 @@ import ChatPage from "./pages/Chat/ChatPage";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
+import ProfilePage from "./pages/Profile/ProfilePage";
 
 function AppRouter() {
     const [auth, setAuth] = useState(false);
     const authSelector = useSelector((state: RootState) => state.auth);
 
-    useEffect(() => {
-        const checkAuth = async () => {
-            const token = localStorage.getItem("token");
-            setAuth(!!token);
-        };
-        checkAuth();
-    }, [authSelector.user]);
+
+    // useEffect(() => {
+    //     const checkAuth = async () => {
+    //         const token = localStorage.getItem("accessToken");
+    //         setAuth(!!token);
+    //     };
+    //     checkAuth();
+    // }, [authSelector.user]);
 
     if (authSelector.loading) {
         // Show the loader while checking authentication
@@ -32,7 +34,7 @@ function AppRouter() {
                     <Route element={<MainLayout />}>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/chat/*" element={<ChatPage />} />
-                        <Route path="/profile/*" element={<HomePage />} />
+                        <Route path="/profile/*" element={<ProfilePage />} />
                         <Route path="*" element={<Navigate to="/" />} />
                     </Route>
                 ) : (
