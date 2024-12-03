@@ -1,4 +1,5 @@
-import { getLoginUserApi, logInApi } from "@/services/authService";
+import { getLoginUserApi, logInApi } from "@/services/AuthService";
+import websocket from "@/services/WebSocketService";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 // Define the login service as an async thunk
@@ -58,7 +59,7 @@ const authSlice = createSlice({
         logout: (state) => {
             state.user = null;
             state.error = null;
-            localStorage.removeItem("accessToken"); // Clear token from local storage
+            localStorage.removeItem("token"); // Clear token from local storage
         },
     },
     extraReducers: (builder) => {
@@ -72,10 +73,9 @@ const authSlice = createSlice({
                 (state, action: PayloadAction<any>) => {
                     state.loading = false;
                     state.user = action.payload;
-                    localStorage.setItem(
-                        "accessToken",
-                        action.payload.accessToken
-                    ); // Store token in local storage
+                    localStorage.setItem("token", action.payload.token); // Store token in local storage
+                    localStorage.setItem("userId", action.payload.userId); // Store token in local storage
+                    websocket.connect(action.payload.token);
                 }
             )
             .addCase(
@@ -95,6 +95,7 @@ const authSlice = createSlice({
                     state.loading = false;
                     localStorage.setItem("userId", action.payload.userId);
                     state.user = action.payload;
+                    websocket.disconnect();
                 }
             )
             .addCase(

@@ -9,23 +9,22 @@ import {
     fetchChatsByUserId,
     fetchMessagesByChatId,
 } from "@/store/slice/ChatSlice";
+import websocket from "@/services/WebSocketService";
+import { addMessage } from "@/store/slice/ChatSocketSlice";
 
 const ChatPage = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const { chats, messages, currentChatId } = useSelector(
-        (state: RootState) => state.chatSocket
-    );
 
-    const userSelector = useSelector((state: RootState) => state.auth.user);
+    // const userSelector = useSelector((state: RootState) => state.auth.user);
     const [message, setMessage] = useState("");
 
     const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+    // console.log(userSelector);
 
-    console.log(chats, messages, currentChatId);
-    console.log(userSelector);
+    websocket.connect(localStorage.getItem("token") || "");
 
     useEffect(() => {
-        dispatch(fetchChatsByUserId(userSelector.userId));
+        dispatch(fetchChatsByUserId("806e3060-db33-4875-a1ce-3e39bdf68e35"));
     }, [dispatch]);
 
     useEffect(() => {
@@ -35,7 +34,6 @@ const ChatPage = () => {
         }
     }, [dispatch, selectedChatId]);
 
-    useChatSocket();
     // Initialize WebSocket listeners
 
     return (
@@ -44,7 +42,7 @@ const ChatPage = () => {
             <div className="flex flex-1 overflow-hidden">
                 {/* Left side: Chat Room */}
                 <div className="flex-1 border-r border-gray-300 h-full overflow-auto">
-                    <ChatRoom />
+                    <ChatRoom chatId={selectedChatId} />
                 </div>
 
                 {/* Right side: Chat List */}

@@ -14,7 +14,7 @@ function AppRouter() {
 
     useEffect(() => {
         const checkAuth = async () => {
-            const token = localStorage.getItem("accessToken");
+            const token = localStorage.getItem("token");
             setAuth(!!token);
         };
         checkAuth();

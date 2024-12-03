@@ -10,7 +10,8 @@ const store = configureStore({
     reducer: {
         auth: authReducer, // Add reducers here
         chatSocket: chatSocketSlice,
-        chat: chatSlice,
+        // chat: chatSlice,
+        chat: chatSocketSlice,
     },
 });
 

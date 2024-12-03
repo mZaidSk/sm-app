@@ -18,7 +18,7 @@ const instance: AxiosInstance = axios.create({
 instance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
         // Retrieve and sanitize the token
-        const token = localStorage.getItem("accessToken")?.replace(/"/g, "");
+        const token = localStorage.getItem("token")?.replace(/"/g, "");
 
         config.headers = config.headers ?? {}; // Initialize headers as an empty object if not present
 

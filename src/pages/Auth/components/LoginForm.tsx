@@ -25,8 +25,8 @@ export function LoginForm() {
         formState: { errors },
     } = useForm({
         defaultValues: {
-            email: "zaid@gmail.com", // Set initial value for username
-            password: "zaid@1234", // Set initial value for password
+            email: "johndoe@example.com", // Set initial value for username
+            password: "securepassword123", // Set initial value for password
         },
     });
 
