@@ -4,7 +4,7 @@ import ProfileImgButton from "./ProfileImgButton";
 
 const ProfileImageComponent = () => {
 
-  const [profileImg, setProfileImg] = useState("profile-img/p1-cat.jpg");
+  const [profileImg, setProfileImg] = useState("/profile-img/p1-cat.jpg");
 
   const handleImageSelect = (newImg: SetStateAction<string>) => {
     setProfileImg(newImg);
