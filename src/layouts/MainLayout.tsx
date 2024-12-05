@@ -28,7 +28,7 @@ const MainLayout = () => {
 
             {/* Main Content */}
             <div className="flex-1 flex flex-col ">
-                <header className="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-auto">
+                <header className="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-20">
                     <SidebarTrigger />
                     <h2 className="text-xl font-semibold">Dashboard</h2>
                     <div className="flex items-center space-x-4">

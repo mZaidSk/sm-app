@@ -1,6 +1,7 @@
 import { registerUserParams } from "@/lib/types";
 import { getLoginUserApi, logInApi, registerApi } from "@/services/AuthService";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+// import websocket from "@/services/WebSocketService";
 
 // Define the login service as an async thunk
 export const loginUser = createAsyncThunk(
@@ -93,7 +94,7 @@ const authSlice = createSlice({
                     state.user = action.payload;
                     localStorage.setItem("token", action.payload.token); // Store token in local storage
                     localStorage.setItem("userId", action.payload.userId); // Store token in local storage
-                    websocket.connect(action.payload.token);
+                    // websocket.connect(action.payload.token);
                 }
             )
             .addCase(
@@ -137,7 +138,7 @@ const authSlice = createSlice({
                     state.loading = false;
                     localStorage.setItem("userId", action.payload.userId);
                     state.user = action.payload;
-                    websocket.disconnect();
+                    // websocket.disconnect();
                 }
             )
             .addCase(
