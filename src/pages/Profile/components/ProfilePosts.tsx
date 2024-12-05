@@ -7,6 +7,7 @@ import {
     CardFooter,
 } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import Post from "@/components/common/posts/post";
 
 // Define the type for a single post
 type Post = {
@@ -40,21 +41,24 @@ const ProfilePosts: React.FC = () => {
                 </Alert>
             ) : (
                 <div className="space-y-4">
-                    {posts.map((post) => (
-                        <Card key={post.id}>
-                            <CardHeader>
-                                <h3 className="text-lg font-medium">
-                                    Post #{post.id}
-                                </h3>
-                            </CardHeader>
-                            <CardContent>
-                                <p>{post.content}</p>
-                            </CardContent>
-                        </Card>
-                    ))}
-                    <Button onClick={handleCreatePost} className="w-full">
-                        Add Another Post
-                    </Button>
+                    {/* Posts Container */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto py-10 px-4">
+                        {/* Rendering the Posts */}
+                        <Post />
+                        <Post />
+                        <Post />
+                        {/* Add more <Post /> components as needed */}
+                    </div>
+
+                    {/* Button */}
+                    <div className="flex justify-center">
+                        <Button
+                            onClick={handleCreatePost}
+                            className="py-3 text-white rounded-md"
+                        >
+                            Add Post
+                        </Button>
+                    </div>
                 </div>
             )}
         </div>
