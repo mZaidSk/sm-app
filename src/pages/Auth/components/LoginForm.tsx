@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 import { useDispatch } from "react-redux"; // Import useDispatch to dispatch actions
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -50,9 +50,9 @@ export function LoginForm() {
     };
 
     return (
-        <Card className="w-[350px]">
-            <CardHeader>
-                <CardTitle>Login</CardTitle>
+        <Card className="w-[350px] ">
+            <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold font-serif text-blue-900">Login</CardTitle>
                 <CardDescription>
                     Access your account by logging in.
                 </CardDescription>
@@ -110,12 +110,19 @@ export function LoginForm() {
                             )}
                         </div>
                     </div>
-                    <div className="flex justify-between mt-4">
-                        <Button type="submit">Login</Button>
+                    <div className="flex justify-center mt-6">
+                        <Button type="submit" className="w-[50%] h-auto bg-blue-700 text-white text-lg font-bold  py-2 rounded-lg hover:bg-blue-800 transition duration-300 ">Login</Button>
                     </div>
                 </form>
             </CardContent>
-            <CardFooter></CardFooter>
+            <CardFooter className="flex justify-center items-center ">
+            <p className="text-sm text-center">
+                    Don't have an account?{" "}
+                    <Link to="register" className="text-blue-700 hover:underline font-bold mx-2">
+                        Sign up
+                    </Link>
+                </p>
+            </CardFooter>
         </Card>
     );
 }

@@ -1,24 +1,22 @@
-import PostFooter from "./PostFooter";
-import PostHeader from "./PostHeader";
+import ContentCard from "../Posts/component/ContentCard";
+import PostHeader from "../Posts/component/PostHeader";
+import PostFooter from "../Posts/component/PostFooter";
+// import PostHeader from "./PostHeader";
+
 
 
 
 
 const Post = () => {
+  const imageUrl = new URL("https://github.com/shadcn.png");
   return (
     <div className="w-full">
       {/* Post Header */}
       <PostHeader />
 
       {/* Post Image */}
-      <div className="my-2 rounded overflow-hidden">
-        <img
-          src={"post.imageURL"}
-          alt="FEED POST IMG"
-          className="w-full object-cover"
-        />
-      </div>
-
+      <ContentCard content={imageUrl} />
+      
       {/* Post Footer */}
       <PostFooter/>
     </div>
