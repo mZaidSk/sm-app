@@ -13,6 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import CommentSection from '../../Comments/CommentSection';
 
 
 const PostFooter = () => {
@@ -79,7 +80,7 @@ const PostFooter = () => {
       </div>
       
       {/* Comment Button */}
-      <div className="flex space-x-6 items-center">
+      {/* <div className="flex space-x-6 items-center"> 
       <Sheet>
       <SheetTrigger asChild>
         <Button variant="outline"><MessageSquare size={20} /></Button>
@@ -90,7 +91,8 @@ const PostFooter = () => {
           <SheetDescription>
             Make changes to your profile here. Click save when you're done.
           </SheetDescription>
-        </SheetHeader>
+          </SheetHeader>
+        
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
@@ -109,10 +111,13 @@ const PostFooter = () => {
           <SheetClose asChild>
             <Button type="submit">Save changes</Button>
           </SheetClose>
-        </SheetFooter>
-      </SheetContent>
+        </SheetFooter>  */}
+       
+        <CommentSection/>
+        
+      {/* </SheetContent>
     </Sheet>
-      </div>
+      </div> */}
     </div>
   );
 };

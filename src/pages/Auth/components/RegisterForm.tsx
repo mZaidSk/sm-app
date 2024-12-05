@@ -112,7 +112,7 @@ const RegisterForm = () => {
     return (
         <Card className="w-full max-w-3xl shadow-xl px-4 ">
     <CardHeader className="text-center">
-        <CardTitle className="text-3xl font-bold text-blue-900 font-serif">Register</CardTitle>
+        <CardTitle className="text-3xl font-bold text-zinc-900 font-serif">Register</CardTitle>
         <CardDescription className="text-sm text-gray-800">
             Create a new account
         </CardDescription>
