@@ -1,16 +1,26 @@
 import { Routes, Route } from "react-router-dom";
-import Profile from "./components/Profile"
+import Profile from "./components/Profile";
+import ProfilePosts from "./components/ProfilePosts";
 
-// /profile me
-// /profile/:username 
 const ProfilePage = () => {
     return (
         <Routes>
-            <Route path="/" element={<Profile />} />
-            <Route path="/:username" element={<Profile />} />
+            {/* Parent route for logged-in user's profile */}
+            <Route path="/" element={<Profile />}>
+                <Route index element={<ProfilePosts />} /> {/* Default route */}
+                <Route path="posts" element={<ProfilePosts />} />
+                <Route path="text-posts" element={<ProfilePosts />} />
+                {/* <Route path="tagged" element={<Profile activeTab="tagged" />} /> */}
+            </Route>
+
+            {/* Parent route for other user's profile */}
+            <Route path="/:username" element={<Profile />}>
+                {/* <Route path="posts" element={<Profile activeTab="posts" />} />
+                <Route path="saved" element={<Profile activeTab="saved" />} />
+                <Route path="tagged" element={<Profile activeTab="tagged" />} /> */}
+            </Route>
         </Routes>
     );
 };
 
 export default ProfilePage;
-

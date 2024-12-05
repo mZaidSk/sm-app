@@ -10,9 +10,8 @@ import { RootState } from "./store/store";
 import ProfilePage from "./pages/Profile/ProfilePage";
 
 function AppRouter() {
-    const [auth, setAuth] = useState(false);
+    const [auth, setAuth] = useState(true);
     const authSelector = useSelector((state: RootState) => state.auth);
-
 
     // useEffect(() => {
     //     const checkAuth = async () => {
