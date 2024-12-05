@@ -31,6 +31,7 @@ const RegisterForm = () => {
         handleSubmit,
         formState: { errors }, getValues
     } = useForm<registerUserParams>({
+        // mode: "onSubmit", 
         defaultValues: {
             username: "",
             firstName: "",
@@ -40,7 +41,7 @@ const RegisterForm = () => {
             gender: Gender.Male, // default value for gender
             dob: new Date(), //"",
             password: "",
-            profilePictureUrl: "",
+            profilePictureUrl: "profile-img/p1-cat.jpg",
             status: Status.Active,
         },
     });
@@ -83,7 +84,7 @@ const RegisterForm = () => {
 
     ]
 
-    const onSubmit = (data: any) => {
+    const onSubmit = (data:registerUserParams) => {
         console.log(data);
 
         // Dispatch login action
@@ -109,7 +110,7 @@ const RegisterForm = () => {
     };
 
     return (
-        <Card className="w-full max-w-3xl shadow-xl px-4 my-10">
+        <Card className="w-full max-w-3xl shadow-xl px-4 ">
     <CardHeader className="text-center">
         <CardTitle className="text-3xl font-bold text-blue-900 font-serif">Register</CardTitle>
         <CardDescription className="text-sm text-gray-800">
@@ -122,8 +123,8 @@ const RegisterForm = () => {
                 {/* Profile Image, Name, and Username */}
                 <div className="flex items-start space-x-4">
                     {/* Profile Image */}
-                    {/* <ProfileImageComponent/> */}
-                    <div className="relative w-28 h-28">
+                    <ProfileImageComponent/>
+                    {/* <div className="relative w-28 h-28">
                         <img
                             src={profileImg || "profile-img/p1-cat.jpg"} 
                             alt="Profile"
@@ -141,7 +142,7 @@ const RegisterForm = () => {
                             />
                             +
                         </label>
-                        </div>
+                        </div> */}
 
                     {/* fisrtname and surname */}
                     <div className="flex-1">
@@ -312,7 +313,7 @@ const RegisterForm = () => {
                 <div className="flex justify-end">
                     <Button
                         type="submit"
-                        className="w-[35%] h-auto bg-blue-600 text-white text-lg font-bold mt-3 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+                        className="w-[35%] h-auto text-white text-lg font-bold mt-3 py-2 rounded-lg hover:bg-zinc-800 transition duration-300"
                     >
                         Register
                     </Button>
@@ -323,7 +324,7 @@ const RegisterForm = () => {
     <CardFooter className="flex justify-center items-center">
         <p className="text-sm text-center">
             Already have an account?
-            <Link to="/login" className="text-blue-500 hover:underline font-bold">
+            <Link to="/login" className="text-black-500 hover:underline font-bold">
                Log In
             </Link>
              {/* <a href="/login" className="text-blue-500 hover:underline font-bold">Log in</a> */}
