@@ -11,7 +11,7 @@ import ProfilePage from "./pages/Profile/ProfilePage";
 import PostPage from "./pages/Post/PostPage";
 
 function AppRouter() {
-    const [auth, setAuth] = useState(false);
+    const [auth, setAuth] = useState(true);
     const authSelector = useSelector((state: RootState) => state.auth);
 
     // useEffect(() => {

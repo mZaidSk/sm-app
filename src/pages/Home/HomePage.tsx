@@ -1,5 +1,4 @@
 import { FeedPost } from "./components/FeedPost";
-import Posts from "./Posts/component/Posts";
 import SuggestedUsers from "./Suggest/SuggestedUsers";
 
 const HomePage = () => {
