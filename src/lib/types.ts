@@ -25,3 +25,10 @@ export type registerUserParams = {
 // Chat
 
 // Post
+
+// Comments
+
+export type crateCommentType = {
+    postId: string;
+    content: string;
+};

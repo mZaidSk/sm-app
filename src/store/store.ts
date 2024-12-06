@@ -6,6 +6,8 @@ import chatSocketSlice from "./slice/ChatSocketSlice"; // Import the auth slice
 import chatSlice from "./slice/ChatSlice"; // Import the
 import userSlice from "./slice/UserSlice"; // Import the
 import feedSlice from "./slice/FeedSlice"; // Import the
+import postSlice from "./slice/PostSlice"; // Import the
+import commentSlice from "./slice/CommentSlice"; // Import the
 import friendSlice from "./slice/FriendSlice"; // Import the
 
 // Configure the store
@@ -15,6 +17,8 @@ const store = configureStore({
         user: userSlice,
         friend: friendSlice,
         feed: feedSlice,
+        post: postSlice,
+        comment: commentSlice,
         chatSocket: chatSocketSlice,
         // chat: chatSlice,
         chat: chatSocketSlice,

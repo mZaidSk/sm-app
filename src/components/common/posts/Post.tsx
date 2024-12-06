@@ -36,12 +36,7 @@ const Post = ({ post }: any) => {
 
             {/* Card Footer */}
             <CardFooter className="p-4 border-t border-gray-200 bg-gray-50">
-                <PostFooter
-                    id={post.id}
-                    likes={post.reactionCounts.LIKE}
-                    loves={post.reactionCounts.LOVE}
-                    laughs={post.reactionCounts.LAUGH}
-                />
+                <PostFooter id={post.id} initialReactions={post.reactions} />
             </CardFooter>
         </Card>
     );

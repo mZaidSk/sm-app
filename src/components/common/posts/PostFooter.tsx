@@ -1,106 +1,102 @@
-import React, { useState } from "react";
-import { ThumbsUp, Heart, Laugh, MessageSquare } from "lucide-react"; // Example icons from lucide-react
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import React, { useState, useEffect } from "react";
+import { ThumbsUp, Heart, Laugh } from "lucide-react";
+import CommentSection from "@/pages/Home/Comments/CommentSection";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
 import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "@/components/ui/sheet";
+    createPostReaction,
+    removePostReaction,
+} from "@/store/slice/PostSlice";
 
+// Interface for the PostFooter component props
 interface PostFooterProps {
-    id: string;
-    likes: number;
-    loves: number;
-    laughs: number;
+    id: string; // Post ID
+    initialReactions: { reaction: "LIKE" | "LOVE" | "LAUGH"; userId: string }[]; // Initial reactions data
 }
 
-const PostFooter: React.FC<PostFooterProps> = ({
-    id,
-    likes,
-    loves,
-    laughs,
-}) => {
+const PostFooter: React.FC<PostFooterProps> = ({ id, initialReactions }) => {
+    const authUser = useSelector((state: RootState) => state.auth.user);
+    const dispatch = useDispatch<AppDispatch>();
+    const [reactions, setReactions] = useState(initialReactions);
+    const [userReaction, setUserReaction] = useState<
+        "LIKE" | "LOVE" | "LAUGH" | null
+    >(null);
+
+    // Calculate reaction counts dynamically
+    const likeCount = reactions.filter((r) => r.reaction === "LIKE").length;
+    const loveCount = reactions.filter((r) => r.reaction === "LOVE").length;
+    const laughCount = reactions.filter((r) => r.reaction === "LAUGH").length;
+
+    // Update the user reaction when the component mounts or when reactions change
+    useEffect(() => {
+        const currentUserReaction =
+            reactions.find((r) => r.userId === authUser.id)?.reaction || null;
+        setUserReaction(currentUserReaction);
+    }, [reactions, authUser.id]);
+
+    // Handle reaction change
+    const handleReaction = (reaction: "LIKE" | "LOVE" | "LAUGH") => {
+        if (userReaction === reaction) {
+            // If user clicks the same reaction again, remove it
+            dispatch(removePostReaction(id));
+            setReactions(
+                reactions.filter(
+                    (r) => r.userId !== authUser.id || r.reaction !== reaction
+                )
+            );
+            setUserReaction(null);
+        } else {
+            // If user clicks a different reaction, remove the old reaction first
+            if (userReaction) {
+                dispatch(removePostReaction(id));
+                setReactions(
+                    reactions.filter(
+                        (r) =>
+                            r.userId !== authUser.id ||
+                            r.reaction !== userReaction
+                    )
+                );
+            }
+            // Add the new reaction
+            dispatch(createPostReaction({ postId: id, reaction }));
+            setReactions([
+                ...reactions.filter((r) => r.userId !== authUser.id), // Remove old reaction
+                { reaction, userId: authUser.id }, // Add new reaction
+            ]);
+            setUserReaction(reaction);
+        }
+    };
+
     return (
-        <div className="flex space-x-6 mt-0 mb-2 items-center justify-between w-full ">
+        <div className="flex space-x-6 mt-0 mb-2 items-center justify-between w-full">
             <div className="flex space-x-6 mt-2 items-center">
                 <button
-                    className={`flex items-center space-x-2 ${likes > 0 ? "text-blue-500" : "text-gray-500"}`}
+                    className={`flex items-center space-x-2 ${userReaction === "LIKE" ? "text-blue-500" : "text-gray-500"}`}
+                    onClick={() => handleReaction("LIKE")}
                 >
                     <ThumbsUp size={20} />
-                    <span>{likes}</span>
+                    <span>{likeCount}</span>
                 </button>
 
                 <button
-                    className={`flex items-center space-x-2 ${loves > 0 ? "text-red-500" : "text-gray-500"}`}
+                    className={`flex items-center space-x-2 ${userReaction === "LOVE" ? "text-red-500" : "text-gray-500"}`}
+                    onClick={() => handleReaction("LOVE")}
                 >
                     <Heart size={20} />
-                    <span>{loves}</span>
+                    <span>{loveCount}</span>
                 </button>
 
                 <button
-                    className={`flex items-center space-x-2 ${laughs > 0 ? "text-yellow-500" : "text-gray-500"}`}
+                    className={`flex items-center space-x-2 ${userReaction === "LAUGH" ? "text-yellow-500" : "text-gray-500"}`}
+                    onClick={() => handleReaction("LAUGH")}
                 >
                     <Laugh size={20} />
-                    <span>{laughs}</span>
+                    <span>{laughCount}</span>
                 </button>
             </div>
 
-            {/* Comment Button */}
-            <div className="flex space-x-6 items-center">
-                <Sheet>
-                    <SheetTrigger asChild>
-                        <Button variant="outline">
-                            <MessageSquare size={20} />
-                        </Button>
-                    </SheetTrigger>
-                    <SheetContent>
-                        <SheetHeader>
-                            <SheetTitle>Edit profile</SheetTitle>
-                            <SheetDescription>
-                                Make changes to your profile here. Click save
-                                when you're done.
-                            </SheetDescription>
-                        </SheetHeader>
-                        <div className="grid gap-4 py-4">
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="name" className="text-right">
-                                    Name
-                                </Label>
-                                <Input
-                                    id="name"
-                                    value="Pedro Duarte"
-                                    className="col-span-3"
-                                />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label
-                                    htmlFor="username"
-                                    className="text-right"
-                                >
-                                    Username
-                                </Label>
-                                <Input
-                                    id="username"
-                                    value="@peduarte"
-                                    className="col-span-3"
-                                />
-                            </div>
-                        </div>
-                        <SheetFooter>
-                            <SheetClose asChild>
-                                <Button type="submit">Save changes</Button>
-                            </SheetClose>
-                        </SheetFooter>
-                    </SheetContent>
-                </Sheet>
-            </div>
+            {/* Comment Section */}
+            <CommentSection postId={id} />
         </div>
     );
 };

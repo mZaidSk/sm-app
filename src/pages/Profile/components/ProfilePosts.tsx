@@ -7,7 +7,7 @@ import {
     CardFooter,
 } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import Post from "@/components/common/posts/post";
+import Post from "@/components/common/posts/Post";
 import { Link } from "react-router-dom";
 
 interface ProfilePostsProps {

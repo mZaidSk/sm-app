@@ -13,3 +13,13 @@ export const createPostApi = (payload: FormData) =>
             "Content-Type": "multipart/form-data",
         },
     });
+
+const postReactionUrl = "post-reactions";
+
+export const createPostReactionApi = (payload: {
+    postId: string;
+    reaction: "LIKE" | "LOVE" | "LAUGH";
+}) => instance.post(`${postReactionUrl}`, payload);
+
+export const removePostReactionApi = (postId: string) =>
+    instance.delete(`${postReactionUrl}/${postId}`);

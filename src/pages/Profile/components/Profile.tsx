@@ -18,8 +18,6 @@ const Profile: React.FC = () => {
         (state: RootState) => state.user.user || {}
     );
 
-    console.log(userSelector);
-
     useEffect(() => {
         if (id) {
             fetchUserInfoById(id);
@@ -34,7 +32,6 @@ const Profile: React.FC = () => {
 
     const fetchUserInfoById = (id: string) => {
         // Dispatch action for fetching user info based on id
-        console.log(`Fetching user info for id: ${id}`);
         dispatch(getUserById({ id }));
         // Add your logic here to fetch data based on `username`
     };

@@ -1,4 +1,4 @@
-import Post from "@/components/common/posts/post";
+import Post from "@/components/common/posts/Post";
 import { getUserFeed } from "@/store/slice/FeedSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect } from "react";
