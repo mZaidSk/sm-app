@@ -10,18 +10,25 @@ export enum Status {
     Inactive = "INACTIVE",
     Banned = "BANNED",
 }
-export type registerUserParams =  {
+export type registerUserParams = {
     username: string;
     firstName: string;
     lastName: string;
     email: string;
     phoneNo: string;
-    gender: Gender;//"Male" | "Female" | "Other"
-    dob: Date; // Use Date type if working with actual Date objects
+    gender: Gender; //"Male" | "Female" | "Other"
+    dob: string; // Use Date type if working with actual Date objects
     password: string;
     profilePictureUrl: string;
-    status:Status// "ACTIVE" | "INACTIVE" | "BANNED"; 
-}
+    status: Status; // "ACTIVE" | "INACTIVE" | "BANNED";
+};
 // Chat
 
 // Post
+
+// Comments
+
+export type crateCommentType = {
+    postId: string;
+    content: string;
+};

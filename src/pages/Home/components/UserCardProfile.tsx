@@ -1,4 +1,14 @@
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
@@ -10,9 +20,9 @@ interface UserProfileCardProps {
     name: string;
     username: string;
     profileImage: string;
-    isFollowing:boolean;
-    noOfPost: number,
-    noOfFriends: number,
+    isFollowing: boolean;
+    noOfPost: number;
+    noOfFriends: number;
 }
 
 const UserProfileCard: React.FC<UserProfileCardProps> = ({
@@ -23,7 +33,6 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({
     noOfPost,
     noOfFriends,
 }) => {
-
     const [isFollowingvalue, setIsFollowing] = useState(isFollowing);
 
     // Handle "Unfollow" action
@@ -38,10 +47,13 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({
 
     return (
         <HoverCardContent className="w-80">
-        {/* <div className="max-w-sm mx-auto bg-white shadow-lg rounded-lg p-4"> */}
+            {/* <div className="max-w-sm mx-auto bg-white shadow-lg rounded-lg p-4"> */}
             {/* Profile Section */}
             <div className="flex items-center space-x-4">
-            <AvatarContainer username={username} profileImage={profileImage}/>
+                <AvatarContainer
+                    username={username}
+                    profileImage={profileImage}
+                />
                 <div>
                     <h3 className="text-lg font-bold">{name}</h3>
                     <p className="text-sm text-gray-500">{username}</p>
@@ -58,10 +70,8 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({
                     <h4 className="text-sm font-bold">{noOfFriends}</h4>
                     <p className="text-sm text-gray-500">friends</p>
                 </div>
-               
             </div>
 
-           
             {/* Buttons Section */}
             <div className="flex justify-between mt-4">
                 <Button className="bg-zinc-700 text-white py-2 px-4 rounded-lg">
@@ -73,7 +83,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({
                     onUnfollow={() => setIsFollowing(false)}
                 />
             </div>
-        {/* </div> */}
+            {/* </div> */}
         </HoverCardContent>
     );
 };

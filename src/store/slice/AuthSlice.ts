@@ -23,10 +23,7 @@ export const loginUser = createAsyncThunk(
 // Define the login service as an async thunk
 export const registerUser = createAsyncThunk(
     "auth/registerUser",
-    async (
-        payload: registerUserParams,
-        { rejectWithValue }
-    ) => {
+    async (payload: registerUserParams, { rejectWithValue }) => {
         try {
             const response = await registerApi(payload);
             return response.data;
@@ -37,13 +34,12 @@ export const registerUser = createAsyncThunk(
     }
 );
 
-
 // Define the getLoginUser service as an async thunk
 export const getLoginUser = createAsyncThunk(
     "auth/getLoginUser",
     async (_, { rejectWithValue }) => {
         try {
-            const token = localStorage.getItem("accessToken");
+            const token = localStorage.getItem("token");
             if (!token) throw new Error("No token found");
 
             const response = await getLoginUserApi(); // Fetch user details using the token
@@ -93,7 +89,7 @@ const authSlice = createSlice({
                     state.loading = false;
                     state.user = action.payload;
                     localStorage.setItem("token", action.payload.token); // Store token in local storage
-                    localStorage.setItem("userId", action.payload.userId); // Store token in local storage
+                    // localStorage.setItem("userId", action.payload.userId); // Store token in local storage
                     // websocket.connect(action.payload.token);
                 }
             )
@@ -113,11 +109,9 @@ const authSlice = createSlice({
                 registerUser.fulfilled,
                 (state, action: PayloadAction<any>) => {
                     state.loading = false;
-                    state.user = action.payload;
-                    localStorage.setItem(
-                        "token",
-                        action.payload.token
-                    ); // Store token in local storage
+                    localStorage.setItem("token", action.payload.token);
+                    state.user = action.payload.user;
+                    // Store token in local storage
                 }
             )
             .addCase(
@@ -136,9 +130,8 @@ const authSlice = createSlice({
                 getLoginUser.fulfilled,
                 (state, action: PayloadAction<any>) => {
                     state.loading = false;
-                    localStorage.setItem("userId", action.payload.userId);
                     state.user = action.payload;
-                    // websocket.disconnect();
+                    console.log(action.payload);
                 }
             )
             .addCase(

@@ -1,16 +1,46 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import {
     createPostApi,
+    createPostReactionApi,
     getAllPostApi,
     getAllPostByUserIdApi,
-} from "@/services/PostService"; // Replace with your actual service imports
+    removePostReactionApi,
+} from "@/services/PostService";
 
-// Define the create post service as an async thunk
+// Types
+interface Reaction {
+    id: string;
+    reaction: "LIKE" | "LOVE" | "LAUGH";
+    userId: string;
+    reactedAt: any;
+}
+
+interface Post {
+    id: string;
+    content: string; // Example property, adjust based on API response
+    reactions: Reaction[];
+    [key: string]: any; // Include other dynamic post properties
+}
+
+interface PostState {
+    posts: Post[];
+    loading: boolean;
+    error: string | null;
+}
+
+// Initial State
+const initialState: PostState = {
+    posts: [],
+    loading: false,
+    error: null,
+};
+
+// Async Thunks
 export const createPost = createAsyncThunk(
     "posts/createPost",
     async (postData: any, { rejectWithValue }) => {
         try {
-            const response = await createPostApi(postData); // Call the API to create a post
+            const response = await createPostApi(postData);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(
@@ -20,12 +50,11 @@ export const createPost = createAsyncThunk(
     }
 );
 
-// Define the fetch posts service as an async thunk
 export const getAllPost = createAsyncThunk(
     "posts/getAllPost",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await getAllPostApi(); // Fetch all posts
+            const response = await getAllPostApi();
             return response.data;
         } catch (error: any) {
             return rejectWithValue(
@@ -35,12 +64,11 @@ export const getAllPost = createAsyncThunk(
     }
 );
 
-// Define the fetch posts service as an async thunk
 export const getAllPostByUserId = createAsyncThunk(
     "posts/getAllPostByUserId",
     async (userId: string, { rejectWithValue }) => {
         try {
-            const response = await getAllPostByUserIdApi(userId); // Fetch all posts
+            const response = await getAllPostByUserIdApi(userId);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(
@@ -50,24 +78,43 @@ export const getAllPostByUserId = createAsyncThunk(
     }
 );
 
-// Define the post state
-interface PostState {
-    posts: any[]; // Adjust based on your API response
-    loading: boolean;
-    error: string | null;
-}
+export const createPostReaction = createAsyncThunk(
+    "posts/createPostReaction",
+    async (
+        payload: { postId: string; reaction: "LIKE" | "LOVE" | "LAUGH" },
+        { rejectWithValue }
+    ) => {
+        try {
+            const response = await createPostReactionApi(payload);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data || "Failed to create post reaction"
+            );
+        }
+    }
+);
 
-const initialState: PostState = {
-    posts: [],
-    loading: false,
-    error: null,
-};
+export const removePostReaction = createAsyncThunk(
+    "posts/removePostReaction",
+    async (postId: string, { rejectWithValue }) => {
+        try {
+            const response = await removePostReactionApi(postId);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data || "Failed to remove post reaction"
+            );
+        }
+    }
+);
 
-// Create the post slice
+// Slice
 const postSlice = createSlice({
     name: "posts",
     initialState,
     reducers: {},
+
     extraReducers: (builder) => {
         builder
             // Create Post
@@ -77,9 +124,9 @@ const postSlice = createSlice({
             })
             .addCase(
                 createPost.fulfilled,
-                (state, action: PayloadAction<any>) => {
+                (state, action: PayloadAction<Post>) => {
                     state.loading = false;
-                    state.posts.push(action.payload); // Add the new post to the state
+                    state.posts.push(action.payload);
                 }
             )
             .addCase(
@@ -90,16 +137,16 @@ const postSlice = createSlice({
                 }
             )
 
-            // Fetch User Posts
+            // Fetch All Posts
             .addCase(getAllPost.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(
                 getAllPost.fulfilled,
-                (state, action: PayloadAction<any[]>) => {
+                (state, action: PayloadAction<Post[]>) => {
                     state.loading = false;
-                    state.posts = action.payload; // Update the state with fetched posts
+                    state.posts = action.payload;
                 }
             )
             .addCase(
@@ -110,16 +157,16 @@ const postSlice = createSlice({
                 }
             )
 
-            // Fetch Posts by User id
+            // Fetch Posts by User ID
             .addCase(getAllPostByUserId.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(
                 getAllPostByUserId.fulfilled,
-                (state, action: PayloadAction<any[]>) => {
+                (state, action: PayloadAction<Post[]>) => {
                     state.loading = false;
-                    state.posts = action.payload; // Update the state with fetched posts
+                    state.posts = action.payload;
                 }
             )
             .addCase(
@@ -127,6 +174,46 @@ const postSlice = createSlice({
                 (state, action: PayloadAction<any>) => {
                     state.loading = false;
                     state.error = action.payload || "Failed to fetch posts";
+                }
+            )
+
+            // Create Post Reaction
+            .addCase(createPostReaction.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(
+                createPostReaction.fulfilled,
+                (state, action: PayloadAction<Post[]>) => {
+                    state.loading = false;
+                }
+            )
+            .addCase(
+                createPostReaction.rejected,
+                (state, action: PayloadAction<any>) => {
+                    state.loading = false;
+                    state.error =
+                        action.payload || "Failed to create post reaction";
+                }
+            )
+
+            // Remove Post Reaction
+            .addCase(removePostReaction.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(
+                removePostReaction.fulfilled,
+                (state, action: PayloadAction<any>) => {
+                    state.loading = false;
+                }
+            )
+            .addCase(
+                removePostReaction.rejected,
+                (state, action: PayloadAction<any>) => {
+                    state.loading = false;
+                    state.error =
+                        action.payload || "Failed to remove post reaction";
                 }
             );
     },

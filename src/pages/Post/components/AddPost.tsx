@@ -10,6 +10,10 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { createPost } from "@/store/slice/PostSlice";
+import { useNavigate } from "react-router-dom";
 
 interface PostData {
     content: string;
@@ -20,6 +24,9 @@ interface PostData {
 }
 
 const AddPost: React.FC = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate(); // Initialize useNavigate hook
+
     const [formData, setFormData] = useState<PostData>({
         content: "",
         imageFile: null,
@@ -57,30 +64,35 @@ const AddPost: React.FC = () => {
         }
     };
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
-        const payload = {
-            userId: "806e3060-db33-4875-a1ce-3e39bdf68e35", // Replace with the actual user ID
-            content: formData.content,
-            postType: formData.postType,
-            tags: formData.tags,
-            file: formData.imageFile ? formData.imageFile.name : "", // Store the file name or an empty string
-            visibility: formData.visibility,
-            reactionCounts: {
-                LIKE: 0,
-                LOVE: 0,
-                LAUGH: 0,
-            },
-            isDeleted: false,
-        };
+        const formDataToSend = new FormData();
+        formDataToSend.append("content", formData.content);
+        formDataToSend.append("postType", formData.postType);
+        formDataToSend.append("tags", JSON.stringify(formData.tags)); // Convert tags to a JSON string
+        formDataToSend.append("visibility", formData.visibility);
 
-        console.log("Payload:", payload);
+        if (formData.imageFile) {
+            formDataToSend.append("file", formData.imageFile);
+        }
 
-        // If you need to send the payload to an API
-        // axios.post("/api/posts", payload)
-        //     .then(response => console.log("Post created:", response.data))
-        //     .catch(error => console.error("Error creating post:", error));
+        // Log the FormData content
+        console.log("FormData contents:");
+        for (const [key, value] of formDataToSend.entries()) {
+            console.log(`${key}:`, value);
+        }
+
+        dispatch(createPost(formDataToSend))
+            .unwrap() // Ensure we handle success/failure
+            .then(() => {
+                // After successful login, navigate to the home page
+                navigate("/"); // Redirect to '/'
+            })
+            .catch((error) => {
+                // Handle login failure (optional)
+                console.error("Login failed", error);
+            });
     };
 
     return (
@@ -173,14 +185,13 @@ const AddPost: React.FC = () => {
 
                     <Button
                         type="submit"
-                        className="w-full mt-6  text-white py-2 rounded-lg shadow-md"
+                        className="w-full mt-6 text-white py-2 rounded-lg shadow-md"
                     >
                         Post Now
                     </Button>
                 </form>
 
                 {/* Preview Section */}
-
                 {formData.postType === "IMAGE" && (
                     <div className="flex-shrink-0">
                         <h3 className="text-lg font-medium text-gray-700 mb-2">

@@ -29,6 +29,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { logout } from "@/store/slice/AuthSlice";
 
 // Menu items.
 const items = [
@@ -60,6 +63,14 @@ const items = [
 ];
 
 export function AppSidebar() {
+    const dispatch = useDispatch<AppDispatch>();
+
+    const authUserSelector = useSelector((state: RootState) => state.auth.user);
+
+    const handleLogout = () => {
+        dispatch(logout());
+    };
+
     return (
         <Sidebar collapsible="icon" side="left">
             <SidebarHeader>
@@ -108,22 +119,48 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton className="py-5">
-                                    <User2 /> Username
-                                    <ChevronUp className="ml-auto" />
+                                <SidebarMenuButton className="flex items-center py-5 gap-3">
+                                    {/* Profile Picture */}
+                                    <div className="w-8 h-8 rounded-full overflow-hidden">
+                                        {authUserSelector.profilePictureUrl ? (
+                                            <img
+                                                src={
+                                                    authUserSelector.profilePictureUrl
+                                                }
+                                                alt="Profile"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-gray-200 flex items-center justify-center text-sm font-medium">
+                                                {authUserSelector.firstName[0]}
+                                            </div>
+                                        )}
+                                    </div>
+                                    {/* Username */}
+                                    <span className="text-sm font-medium text-gray-800">
+                                        {authUserSelector.username}
+                                    </span>
+                                    {/* Chevron Icon */}
+                                    <ChevronUp className="ml-auto text-gray-500" />
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
+
                             <DropdownMenuContent
                                 side="top"
                                 className="w-[--radix-popper-anchor-width]"
                             >
+                                <Link to={"profile"}>
+                                    <DropdownMenuItem className="cursor-pointer">
+                                        <span>Profile</span>
+                                    </DropdownMenuItem>
+                                </Link>
                                 <DropdownMenuItem>
-                                    <span>Account</span>
+                                    <span>Setting</span>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <span>Billing</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => handleLogout()}
+                                    className="cursor-pointer"
+                                >
                                     <span>Sign out</span>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>

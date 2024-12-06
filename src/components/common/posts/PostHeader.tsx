@@ -7,7 +7,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, Users, Flag, Plus, EllipsisVertical } from "lucide-react"; 
+import { User, Users, Flag, Plus, EllipsisVertical } from "lucide-react";
 import HoverCardComponent from "../HoverCardComponent";
 import AvatarContainer from "../AvatarConatiner";
 interface PostHeaderProps {
@@ -27,15 +27,25 @@ const PostHeader: React.FC<PostHeaderProps> = ({
         <div className="flex justify-between items-center w-full">
             {/* Profile Picture and Name */}
             <div className="flex items-center space-x-3">
-                <AvatarContainer username={username} profileImage={profileImage}/>
-                <HoverCardComponent name={name} username={username} profileImage={profileImage} isFollowing={isFollowing} noOfPost={1} noOfFriends={12}/>
+                <AvatarContainer
+                    username={username}
+                    profileImage={profileImage}
+                />
+                <HoverCardComponent
+                    name={name}
+                    username={username}
+                    profileImage={profileImage}
+                    isFollowing={isFollowing}
+                    noOfPost={1}
+                    noOfFriends={12}
+                />
             </div>
 
             {/* Dropdown Menu for Follow and Report options */}
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <button className="p-2 rounded-full hover:bg-gray-200">
-                        <EllipsisVertical/>
+                        <EllipsisVertical />
                     </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
