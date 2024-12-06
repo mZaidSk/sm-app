@@ -12,7 +12,7 @@ import { User, Users, Flag, Plus } from "lucide-react"; // Icons for follow and 
 interface PostHeaderProps {
     name: string;
     username: string;
-    profileImage: URL;
+    profileImage: string;
     isFollowing: boolean;
 }
 
@@ -28,13 +28,11 @@ const PostHeader: React.FC<PostHeaderProps> = ({
             <div className="flex items-center space-x-3">
                 <Avatar className="z-0">
                     <AvatarImage
-                        src={profileImage.toString()}
+                        src={profileImage}
                         alt={username}
                         className="z-0"
                     />
-                    <AvatarFallback>
-                        {username.charAt(1).toUpperCase()}
-                    </AvatarFallback>
+                    <AvatarFallback>{username?.toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div>
                     <div className="font-semibold">{name}</div>

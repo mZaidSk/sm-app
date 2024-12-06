@@ -30,16 +30,15 @@ const RegisterForm = () => {
         formState: { errors },
         getValues,
     } = useForm<registerUserParams>({
-        // mode: "onSubmit",
         defaultValues: {
-            username: "",
-            firstName: "",
-            lastName: "",
-            email: "",
-            phoneNo: "",
+            username: "zaid",
+            firstName: "shaikh",
+            lastName: "zaid1",
+            email: "zaid1@gmail.com",
+            phoneNo: "1234567891",
             gender: Gender.Male, // default value for gender
-            dob: new Date(), //"",
-            password: "",
+            dob: "2001-01-01", // Default DOB in ISO format
+            password: "12345678",
             profilePictureUrl: "profile-img/p1-cat.jpg",
             status: Status.Active,
         },
@@ -48,9 +47,9 @@ const RegisterForm = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("12345678");
+    const [profileImg, setProfileImg] = useState("/profile-img/p1-cat.jpg");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
-    const [profileImg, setProfileImg] = useState("");
 
     const handleConfirmPasswordChange = (
         e: React.ChangeEvent<HTMLInputElement>
@@ -64,34 +63,21 @@ const RegisterForm = () => {
         }
     };
 
-    const profileImgDemo = [
-        {
-            alt: "img 1 cat img",
-            link: "profile-img/p1-cat.jpg",
-        },
-        {
-            alt: "img 1 cat img",
-            link: "profile-img/p1-cat.jpg",
-        },
-        {
-            alt: "img 1 cat img",
-            link: "profile-img/p1-cat.jpg",
-        },
-        {
-            alt: "img 1 cat img",
-            link: "profile-img/p1-cat.jpg",
-        },
-    ];
-
     const onSubmit = (data: registerUserParams) => {
-        console.log(data);
+        const payload = {
+            ...data,
+            profilePictureUrl: profileImg,
+            status: Status.Active,
+        };
+
+        console.log(payload);
 
         // Dispatch login action
         dispatch(
             registerUser({
-                username: data.username,
                 firstName: data.firstName,
                 lastName: data.lastName,
+                username: data.username,
                 email: data.email,
                 phoneNo: data.phoneNo,
                 gender: data.gender,
@@ -126,26 +112,10 @@ const RegisterForm = () => {
                         {/* Profile Image, Name, and Username */}
                         <div className="flex items-start space-x-4">
                             {/* Profile Image */}
-                            <ProfileImageComponent />
-                            {/* <div className="relative w-28 h-28">
-                        <img
-                            src={profileImg || "profile-img/p1-cat.jpg"} 
-                            alt="Profile"
-                            className="w-full h-full rounded-full object-cover border border-gray-300"
-                        />
-                        
-                    <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-1 rounded-full cursor-pointer">
-                            <input
-                                type="image"//file
-                                accept="image/*"
-                                className="hidden"
-                                onChange={(e) => {
-                                   
-                                }}
+                            <ProfileImageComponent
+                                profileImg={profileImg}
+                                setProfileImg={setProfileImg}
                             />
-                            +
-                        </label>
-                        </div> */}
 
                             {/* fisrtname and surname */}
                             <div className="flex-1">
@@ -244,6 +214,7 @@ const RegisterForm = () => {
                                     </span>
                                 )}
                             </div>
+
                             <div>
                                 <Label htmlFor="gender">Gender</Label>
                                 <select
@@ -373,7 +344,7 @@ const RegisterForm = () => {
                         </div>
 
                         {/* Submit Button */}
-                        <div className="flex justify-end">
+                        <div className="flex justify-center">
                             <Button
                                 type="submit"
                                 className="w-[35%] h-auto text-white font-bold mt-3 py-2 rounded-lg transition duration-300"

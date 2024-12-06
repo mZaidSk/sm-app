@@ -4,20 +4,24 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import authReducer from "./slice/AuthSlice"; // Import the auth slice
 import chatSocketSlice from "./slice/ChatSocketSlice"; // Import the auth slice
 import chatSlice from "./slice/ChatSlice"; // Import the
+import userSlice from "./slice/UserSlice"; // Import the
+import feedSlice from "./slice/FeedSlice"; // Import the
+import friendSlice from "./slice/FriendSlice"; // Import the
 
 // Configure the store
 const store = configureStore({
     reducer: {
         auth: authReducer, // Add reducers here
+        user: userSlice,
+        friend: friendSlice,
+        feed: feedSlice,
         chatSocket: chatSocketSlice,
         // chat: chatSlice,
         chat: chatSocketSlice,
     },
 });
 
-
 // login /user -> auth.user
-
 
 // profile user info if store user: user data show else dispach(getloginuser)
 

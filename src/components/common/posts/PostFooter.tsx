@@ -15,17 +15,17 @@ import {
 } from "@/components/ui/sheet";
 
 interface PostFooterProps {
+    id: string;
     likes: number;
     loves: number;
     laughs: number;
-    comments: number;
 }
 
 const PostFooter: React.FC<PostFooterProps> = ({
+    id,
     likes,
     loves,
     laughs,
-    comments,
 }) => {
     return (
         <div className="flex space-x-6 mt-0 mb-2 items-center justify-between w-full ">

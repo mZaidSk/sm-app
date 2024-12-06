@@ -1,63 +1,118 @@
-import React, { useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { getSuggestFriends } from "@/store/slice/FriendSlice";
+import { AppDispatch, RootState } from "@/store/store";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
 interface SuggestedUserCardProps {
-  username: string;
-  followers: string;
+    user: any;
+    followers: string;
 }
 
-const SuggestedUserCard: React.FC<SuggestedUserCardProps> = ({ username, followers }) => (
-  <div className="flex items-center justify-between py-2 border-b">
-    <div className="flex items-center space-x-3">
-      <div className="w-10 h-10 rounded-full bg-gray-300"></div> {/* Avatar Placeholder */}
-      <div>
-        <p className="text-sm font-semibold">{username}</p>
-        <p className="text-xs text-gray-500">Followed by {followers}</p>
-      </div>
+const SuggestedUserCard: React.FC<SuggestedUserCardProps> = ({ user }) => (
+    <div className="flex items-center justify-between w-full max-w-md py-4 px-5 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 bg-white">
+        {/* User Info Section */}
+        <div className="flex items-center space-x-4 flex-1">
+            <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
+                <Avatar className="w-full h-full">
+                    <AvatarImage
+                        src={user.profilePictureUrl}
+                        alt={`Profile picture of ${user.firstName}`}
+                        className="object-cover w-full h-full"
+                    />
+                    <AvatarFallback className="text-gray-500 font-medium text-xl">
+                        {user.firstName[0]}
+                    </AvatarFallback>
+                </Avatar>
+            </div>
+            <Link to={`profile/${user?.id}`}>
+                <div className="truncate">
+                    <p className="text-base font-semibold text-gray-900 truncate">
+                        {user.firstName}
+                    </p>
+                    <p className="text-sm text-gray-500 truncate">
+                        @{user.username}
+                    </p>
+                </div>
+            </Link>
+        </div>
+
+        {/* Follow Button */}
+        <Button
+            aria-label={`Follow ${user.firstName}`}
+            className="text-blue-600 font-medium bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 ml-4"
+        >
+            Friend
+        </Button>
     </div>
-    <button className="text-blue-500 text-sm">Follow</button>
-  </div>
 );
 
 const SuggestedUsers = () => {
-  const [user, setUser] = useState({
-    username: 'lathikakotian03',
-    name: 'Lathika',
-  });
+    const dispatch = useDispatch<AppDispatch>();
+    const authUserSelector = useSelector((state: RootState) => state.auth.user);
+    const suggestFriendListSelector = useSelector(
+        (state: RootState) => state.friend.suggestFriendList || []
+    );
 
-  const suggestedUsers = [
-    { username: 'instagram', followers: 'dfd' },
-    { username: 'zaid', followers: 'gcgc+ 7 more' },
-    { username: 'laxmi', followers: 'dgc b  + 2 months' },
-    { username: 'vgv', followers: 'lhih+ 7 more' },
-    { username: 'junior', followers: 'bhjhkhk' },
-  ];
+    const fetchSuggestedFriend = () => {
+        dispatch(getSuggestFriends());
+    };
 
-  return (
-    <div className="w-full max-w-lg mx-0 bg-white px-6 py-4 mt-6 rounded-lg shadow-lg sticky top-24">
-      {/* Profile Section */}
-      <div className="flex items-center space-x-4 mb-6">
-        <div className="w-14 h-14 rounded-full bg-gray-300"></div> {/* Avata */}
-        <div>
-          <p className="font-semibold">{user.name}</p>
-          <p className="text-sm text-gray-500">{user.username}</p>
+    useEffect(() => {
+        fetchSuggestedFriend();
+    }, []);
+
+    return (
+        <div className="w-full max-w-lg mx-auto bg-white px-6 py-6 mt-6 rounded-lg shadow-xl sticky top-24 space-y-6">
+            {/* Profile Section */}
+            <div className="flex items-center space-x-4 mb-6">
+                <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+                    <Avatar className="z-0 w-full h-full">
+                        <AvatarImage
+                            src={authUserSelector?.profilePictureUrl}
+                            alt={authUserSelector?.firstName}
+                            className="object-cover w-full h-full"
+                        />
+                        <AvatarFallback>
+                            {authUserSelector?.username?.charAt(0)}
+                        </AvatarFallback>
+                    </Avatar>
+                </div>
+                <Link to={`profile`}>
+                    <div>
+                        <p className="text-lg font-bold text-gray-900">
+                            {authUserSelector?.firstName}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                            @{authUserSelector?.username}
+                        </p>
+                    </div>
+                </Link>
+            </div>
+
+            {/* Suggested Users Section */}
+            <div className="space-y-4 w-full max-w-lg mx-auto">
+                <p className="text-md font-semibold text-gray-900">
+                    Suggested for you
+                </p>
+                {suggestFriendListSelector.length > 0 ? (
+                    suggestFriendListSelector.map((user, index) => (
+                        <SuggestedUserCard
+                            key={index}
+                            user={user}
+                            followers={user?.followers}
+                        />
+                    ))
+                ) : (
+                    <p className="text-sm text-gray-500">
+                        No suggestions available at the moment.
+                    </p>
+                )}
+            </div>
         </div>
-        <button className="text-blue-500 text-sm ml-auto">Switch</button>
-      </div>
-
-      {/* Suggested Users Section */}
-      <div className="mb-6">
-        <p className="text-md font-semibold">Suggested for you</p>
-        {suggestedUsers.map((user, index) => (
-          <SuggestedUserCard
-            key={index}
-            username={user.username}
-            followers={user.followers}
-          />
-        ))}
-      </div>
-
-      
-    </div>
-  );
+    );
 };
 
 export default SuggestedUsers;

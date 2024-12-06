@@ -10,14 +10,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { LogOut, User, Settings, Search } from "lucide-react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { AppSidebar } from "./Sidebar";
-import { AppDispatch } from "@/store/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/store/slice/AuthSlice";
 
 const MainLayout = () => {
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate(); // Initialize useNavigate hook
+
+    const authUserSelector = useSelector((state: RootState) => state.auth.user);
     const [searchTerm, setSearchTerm] = useState("");
     const [suggestions, setSuggestions] = useState<
         {
@@ -55,6 +58,7 @@ const MainLayout = () => {
 
     const handleLogout = () => {
         dispatch(logout());
+        navigate("/auth");
     };
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,9 +138,16 @@ const MainLayout = () => {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Avatar>
-                                    <AvatarImage src="https://via.placeholder.com/150" />
-                                    <AvatarFallback>U</AvatarFallback>
+                                    <AvatarImage
+                                        src={
+                                            authUserSelector?.profilePictureUrl
+                                        }
+                                    />
+                                    <AvatarFallback>
+                                        {authUserSelector?.firstName[0]}
+                                    </AvatarFallback>
                                 </Avatar>
+                                {/* <p>username</p> */}
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem>
