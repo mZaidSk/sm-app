@@ -5,7 +5,7 @@ interface CommentItemProps {
   user: string;
   content: string;
   datePosted: string;
-  profileImage: URL;
+  profileImage: string;
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({ id,user, content, datePosted, profileImage }) => {

@@ -41,7 +41,7 @@ const PostFooter: React.FC<PostFooterProps> = ({
             </div>
 
             {/* Comment Button */}
-            <CommentSection username={"lathika09"} profileImage={new URL("https://example.com/profile-img/p1-cat.jpg")}/>
+            <CommentSection username={"lathika09"} profileImage={"https://example.com/profile-img/p1-cat.jpg"}/>
         </div>
     );
 };

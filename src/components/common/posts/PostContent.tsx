@@ -1,7 +1,7 @@
 import React from "react";
 
 interface PostContentProps {
-    content: string | URL; // The content can be a string (text) or a URL (image source)
+    content: string; // The content can be a string (text) or a URL (image source)
 }
 
 const PostContent: React.FC<PostContentProps> = ({ content }) => {
@@ -12,7 +12,7 @@ const PostContent: React.FC<PostContentProps> = ({ content }) => {
                 <p className="text-lg text-gray-700">{content}</p>
             ) : (
                 <img
-                    src={content.toString()}
+                    src={content}
                     alt="Content"
                     className="w-full h-auto rounded-lg"
                 />

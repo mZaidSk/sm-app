@@ -5,7 +5,7 @@ import UserProfileCard from "@/pages/Home/components/UserCardProfile";
 interface HoverCardProps {
   name: string;
   username: string;
-  profileImage: URL;
+  profileImage: string;
   isFollowing: boolean;
   noOfPost: number;
   noOfFriends: number;

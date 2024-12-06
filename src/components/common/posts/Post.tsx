@@ -13,11 +13,11 @@ const Post = () => {
     const user = {
         name: "FirstName LastName",
         username: "@Username",
-        profileImage: new URL("https://github.com/shadcn.png"),
-        isFollowing: false, // Example data to toggle follow/unfollow
+        profileImage: "https://github.com/shadcn.png",
+        isFollowing: false, 
     };
 
-    const content = new URL("https://github.com/shadcn.png"); // Example image URL
+    const content ="https://github.com/shadcn.png"; 
 
     const postInteractions = {
         likes: 0,

@@ -16,7 +16,7 @@ import CommentItem from './CommentItem';
 
 interface NewCommentProps {
   username: string;
-  profileImage: URL;
+  profileImage:string;
 }
 
 const CommentSection : React.FC<NewCommentProps> = ({
@@ -29,14 +29,14 @@ const CommentSection : React.FC<NewCommentProps> = ({
       user: 'lathika',
       content: 'This is a comment1',
       datePosted: '6/12/2024, 10:30:00 am',
-      profileImage: new URL("https://example.com/profile-img/p1-cat.jpg"),
+      profileImage: "/profile-img/p1-cat.jpg",
     },
     {
       id: 2,
       user: 'rsr',
       content: 'This is comment3',
       datePosted: '6/12/2024, 10:30:09 am',
-      profileImage: new URL("https://example.com/profile-img/p1-cat.jpg"),
+      profileImage: "/profile-img/p1-cat.jpg",
     },
   ]);
 

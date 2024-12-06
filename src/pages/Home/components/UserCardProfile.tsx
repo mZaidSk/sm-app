@@ -9,7 +9,7 @@ import AvatarContainer from "@/components/common/AvatarConatiner";
 interface UserProfileCardProps {
     name: string;
     username: string;
-    profileImage: URL;
+    profileImage: string;
     isFollowing:boolean;
     noOfPost: number,
     noOfFriends: number,

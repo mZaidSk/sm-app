@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
 interface AvatarProps {
     username: string;
-    profileImage: URL;
+    profileImage: string;
 }
 
 const AvatarContainer: React.FC<AvatarProps> = ({
@@ -12,7 +12,7 @@ const AvatarContainer: React.FC<AvatarProps> = ({
     return (
         <Avatar className="z-0">
             <AvatarImage
-                src={profileImage.toString()}
+                src={profileImage}
                 alt={username}
                 className="z-0"
             />

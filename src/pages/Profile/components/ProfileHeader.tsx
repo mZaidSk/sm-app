@@ -5,6 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link, Outlet } from "react-router-dom";
+import { Label } from "@radix-ui/react-dropdown-menu";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import AvatarContainer from "@/components/common/AvatarConatiner";
+import { useState } from "react";
+import FollowButton from "@/pages/Home/components/FollowButton";
+import FriendsSheet from "./FriendSheet";
 
 const ProfileHeader = () => {
     const data = {
@@ -24,6 +30,41 @@ const ProfileHeader = () => {
             key: "text-posts",
         },
     ];
+
+    const friendsList = [
+        {
+            username: "lathika09",
+            name: "Lathika",
+            profileImage: "/profile-img/p1-cat.jpg",
+            isFollowing: true,
+        },
+        {
+            username: "zaid08",
+            name: "Zaid",
+            profileImage: "https://github.com/shadcn.png",
+            isFollowing: false,
+        },
+        
+    ];
+
+    const [friends, setFriends] = useState(friendsList);
+
+    const handleFollow = (username:any) => {
+        setFriends((prev) =>
+            prev.map((friend) =>
+                friend.username === username ? { ...friend, isFollowing: true } : friend
+            )
+        );
+    };
+
+    const handleUnfollow = (username:any) => {
+        setFriends((prev) =>
+            prev.map((friend) =>
+                friend.username === username ? { ...friend, isFollowing: false } : friend
+            )
+        );
+    };
+    
     return (
         <Card className="max-w-5xl mx-auto p-6 bg-gradient-to-tr from-gray-50 via-white to-gray-100 shadow-xl rounded-lg border border-gray-200 transition-all duration-300 hover:shadow-2xl">
             <CardHeader className="flex flex-col md:flex-row items-center gap-8">
@@ -65,18 +106,29 @@ const ProfileHeader = () => {
 
                     {/* Stats */}
                     <div className="flex gap-8 text-gray-600 text-sm">
-                        {["Posts", "Friends"].map((label, index) => (
-                            <div
-                                key={label}
-                                className="hover:text-gray-900 cursor-pointer transition-all duration-300"
-                            >
-                                <strong className="block text-xl font-semibold">
-                                    {[data.noOfPost, data.noOfFriends][index]}
-                                </strong>
-                                {label}
-                            </div>
-                        ))}
+                        <div
+                            className="hover:text-gray-900 cursor-pointer transition-all duration-300"
+                        >
+                            <strong className="block text-xl font-semibold">
+                                {data.noOfPost}
+                            </strong>
+                            <Label>Posts</Label>
+                        </div>
+                        <div
+                            className="hover:text-gray-900 cursor-pointer transition-all duration-300"
+                        >
+                            <strong className="block text-xl font-semibold">
+                                {data.noOfFriends}
+                            </strong>
+                            <FriendsSheet
+                                friendsList={friends}
+                                onFollow={handleFollow}
+                                onUnfollow={handleUnfollow}
+                            />
+                           
+                        </div>
                     </div>
+
 
                     {/* Bio */}
                     <p className="text-gray-700 text-base">{data.bio}</p>

@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import PostPage from "./pages/Post/PostPage";
+import SettingPage from "./pages/Setting/SettingPage";
 
 function AppRouter() {
     const [auth, setAuth] = useState(true);
@@ -33,6 +34,7 @@ function AppRouter() {
                 {auth ? (
                     <Route element={<MainLayout />}>
                         <Route path="/" element={<HomePage />} />
+                        <Route path="/setting" element={<SettingPage />} />
                         <Route path="/chat/*" element={<ChatPage />} />
                         <Route path="/profile/*" element={<ProfilePage />} />
                         <Route path="/post/*" element={<PostPage />} />

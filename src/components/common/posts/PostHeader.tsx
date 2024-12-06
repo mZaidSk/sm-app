@@ -13,7 +13,7 @@ import AvatarContainer from "../AvatarConatiner";
 interface PostHeaderProps {
     name: string;
     username: string;
-    profileImage: URL;
+    profileImage: string;
     isFollowing: boolean;
 }
 
