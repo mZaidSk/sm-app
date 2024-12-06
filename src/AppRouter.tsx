@@ -8,11 +8,11 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import PostPage from "./pages/Post/PostPage";
 
 function AppRouter() {
     const [auth, setAuth] = useState(true);
     const authSelector = useSelector((state: RootState) => state.auth);
-
 
     // useEffect(() => {
     //     const checkAuth = async () => {
@@ -35,6 +35,7 @@ function AppRouter() {
                         <Route path="/" element={<HomePage />} />
                         <Route path="/chat/*" element={<ChatPage />} />
                         <Route path="/profile/*" element={<ProfilePage />} />
+                        <Route path="/post/*" element={<PostPage />} />
                         <Route path="*" element={<Navigate to="/" />} />
                     </Route>
                 ) : (
