@@ -1,6 +1,6 @@
 import { useState } from "react";
 import EditProfile from "./Edit/EditProfile";
-import { ChevronRight, GlobeLock, MessageCircle, MessageCircleQuestion, UserPen } from "lucide-react";
+import { ChevronRight, GlobeLock, History, MessageCircleQuestion, UserPen } from "lucide-react";
 
 const settingsSections = [
     { label: "Edit Profile", key: "edit-profile",icon:UserPen },
@@ -44,7 +44,8 @@ const SettingPage=()=>{
             onClick={() => setActiveSection(section.key)}
         >
             <div className="flex items-center gap-3">
-                <span className="text-md"><ChevronRight/></span> 
+                {/* <span className="text-md"><ChevronRight/></span>  */}
+                <section.icon/>
                 {section.label}
             </div>
         </button>
