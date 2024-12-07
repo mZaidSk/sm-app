@@ -43,6 +43,10 @@ function AppRouter() {
                                 element={<ProfilePage />}
                             />
                             <Route path="/post/*" element={<PostPage />} />
+                            <Route
+                                path="/setting/*"
+                                element={<SettingPage />}
+                            />
                             <Route path="*" element={<Navigate to="/" />} />
                         </Route>
                     ) : (
@@ -53,11 +57,10 @@ function AppRouter() {
                     )}
                 </Routes>
             </Suspense>
-            <Routes>
+            {/* <Routes>
                 {auth ? (
                     <Route element={<MainLayout />}>
                         <Route path="/" element={<HomePage />} />
-                        <Route path="/setting" element={<SettingPage />} />
                         <Route path="/chat/*" element={<ChatPage />} />
                         <Route path="/profile/*" element={<ProfilePage />} />
                         <Route path="/post/*" element={<PostPage />} />
@@ -69,7 +72,7 @@ function AppRouter() {
                         <Route path="*" element={<Navigate to="/auth" />} />
                     </Route>
                 )}
-            </Routes>
+            </Routes> */}
         </BrowserRouter>
     );
 }

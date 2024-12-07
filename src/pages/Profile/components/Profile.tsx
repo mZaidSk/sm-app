@@ -5,11 +5,27 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { getUser, getUserById } from "@/store/slice/UserSlice";
 import ProfilePosts from "./ProfilePosts";
+import FriendsSheet from "./FriendSheet";
+
+const friendsList = [
+    {
+        username: "lathika09",
+        name: "Lathika",
+        profileImage: "/profile-img/p1-cat.jpg",
+        isFollowing: true,
+    },
+    {
+        username: "zaid08",
+        name: "Zaid",
+        profileImage: "https://github.com/shadcn.png",
+        isFollowing: false,
+    },
+];
 
 const Profile: React.FC = () => {
     const { id } = useParams<{ id: string }>(); // Retrieve the id from the route
@@ -52,6 +68,28 @@ const Profile: React.FC = () => {
             <p className="text-gray-500 text-lg">{message}</p>
         </div>
     );
+
+    const [friends, setFriends] = useState(friendsList);
+
+    const handleFollow = (username: any) => {
+        setFriends((prev) =>
+            prev.map((friend) =>
+                friend.username === username
+                    ? { ...friend, isFollowing: true }
+                    : friend
+            )
+        );
+    };
+
+    const handleUnfollow = (username: any) => {
+        setFriends((prev) =>
+            prev.map((friend) =>
+                friend.username === username
+                    ? { ...friend, isFollowing: false }
+                    : friend
+            )
+        );
+    };
 
     return (
         <Card className="max-w-5xl mx-auto p-6 bg-gradient-to-tr from-gray-50 via-white to-gray-100 shadow-xl rounded-lg border border-gray-200 transition-all duration-300 hover:shadow-2xl">
@@ -114,7 +152,16 @@ const Profile: React.FC = () => {
                                         ][index]
                                     }
                                 </strong>
-                                {label}
+
+                                {label === "Friends" ? (
+                                    <FriendsSheet
+                                        friendsList={friends}
+                                        onFollow={handleFollow}
+                                        onUnfollow={handleUnfollow}
+                                    />
+                                ) : (
+                                    label
+                                )}
                             </div>
                         ))}
                     </div>
