@@ -11,6 +11,7 @@ const HomePage = React.lazy(() => import("./pages/Home/HomePage"));
 const ChatPage = React.lazy(() => import("./pages/Chat/ChatPage"));
 const ProfilePage = React.lazy(() => import("./pages/Profile/ProfilePage"));
 const PostPage = React.lazy(() => import("./pages/Post/PostPage"));
+const SettingPage = React.lazy(() => import("./pages/Setting/SettingPage"));
 
 function AppRouter() {
     const [auth, setAuth] = useState(true);
@@ -42,6 +43,10 @@ function AppRouter() {
                                 element={<ProfilePage />}
                             />
                             <Route path="/post/*" element={<PostPage />} />
+                            <Route
+                                path="/setting/*"
+                                element={<SettingPage />}
+                            />
                             <Route path="*" element={<Navigate to="/" />} />
                         </Route>
                     ) : (
@@ -52,6 +57,22 @@ function AppRouter() {
                     )}
                 </Routes>
             </Suspense>
+            {/* <Routes>
+                {auth ? (
+                    <Route element={<MainLayout />}>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/chat/*" element={<ChatPage />} />
+                        <Route path="/profile/*" element={<ProfilePage />} />
+                        <Route path="/post/*" element={<PostPage />} />
+                        <Route path="*" element={<Navigate to="/" />} />
+                    </Route>
+                ) : (
+                    <Route element={<AuthLayout />}>
+                        <Route path="/auth/*" element={<AuthPage />} />
+                        <Route path="*" element={<Navigate to="/auth" />} />
+                    </Route>
+                )}
+            </Routes> */}
         </BrowserRouter>
     );
 }

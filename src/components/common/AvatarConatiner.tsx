@@ -9,7 +9,7 @@ const AvatarContainer: React.FC<AvatarProps> = ({ username, profileImage }) => {
     return (
         <Avatar className="z-0">
             <AvatarImage
-                src={profileImage.toString()}
+                src={profileImage}
                 alt={username}
                 className="z-0"
             />
