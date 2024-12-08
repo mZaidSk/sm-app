@@ -33,6 +33,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { logout } from "@/store/slice/AuthSlice";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // Menu items.
 const items = [
@@ -60,7 +61,7 @@ const items = [
 
     {
         title: "Settings",
-        url: "/setting",
+        url: "/settings",
         icon: Settings,
     },
 ];
@@ -76,14 +77,34 @@ export function AppSidebar() {
     };
 
     return (
-        <Sidebar collapsible="icon" side="left">
-            <SidebarHeader>
+        <Sidebar collapsible="icon">
+            <SidebarHeader className="h-16 border-b border-sidebar-border">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton className="py-5">
-                                    <Home /> LatZio
+                                <SidebarMenuButton
+                                    size="lg"
+                                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                                >
+                                    <Avatar className="h-8 w-8 rounded-lg">
+                                        <AvatarImage
+                                            src={
+                                                authUserSelector.profilePictureUrl
+                                            }
+                                            alt={authUserSelector.firstName}
+                                        />
+                                        <AvatarFallback className="rounded-lg">
+                                            {authUserSelector.firstName}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <div className="grid flex-1 text-left text-sm leading-tight">
+                                        <span className="truncate font-semibold">
+                                            LatZio
+                                        </span>
+                                    </div>
+
+                                    {/* Chevron Icon */}
                                     <ChevronDown className="ml-auto" />
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
@@ -106,10 +127,21 @@ export function AppSidebar() {
                         <SidebarMenu>
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild className="py-5">
-                                        <Link to={item.url}>
+                                    <SidebarMenuButton asChild size="lg">
+                                        {/* <Link to={item.url}>
                                             <item.icon />
                                             <span>{item.title}</span>
+                                        </Link> */}
+
+                                        <Link to={item.url}>
+                                            <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
+                                                <item.icon size={24} />
+                                            </div>
+                                            <div className="flex flex-col gap-0.5 leading-none">
+                                                <span className="font-semibold">
+                                                    {item.title}
+                                                </span>
+                                            </div>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -123,27 +155,30 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton className="flex items-center py-5 gap-3">
-                                    {/* Profile Picture */}
-                                    <div className="w-8 h-8 rounded-full overflow-hidden">
-                                        {authUserSelector.profilePictureUrl ? (
-                                            <img
-                                                src={
-                                                    authUserSelector.profilePictureUrl
-                                                }
-                                                alt="Profile"
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full bg-gray-200 flex items-center justify-center text-sm font-medium">
-                                                {authUserSelector.firstName[0]}
-                                            </div>
-                                        )}
+                                <SidebarMenuButton
+                                    size="lg"
+                                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                                >
+                                    <Avatar className="h-8 w-8 rounded-lg">
+                                        <AvatarImage
+                                            src={
+                                                authUserSelector.profilePictureUrl
+                                            }
+                                            alt={authUserSelector.firstName}
+                                        />
+                                        <AvatarFallback className="rounded-lg">
+                                            {authUserSelector.firstName}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <div className="grid flex-1 text-left text-sm leading-tight">
+                                        <span className="truncate font-semibold">
+                                            {authUserSelector.firstName}
+                                        </span>
+                                        <span className="truncate text-xs">
+                                            @{authUserSelector.username}
+                                        </span>
                                     </div>
-                                    {/* Username */}
-                                    <span className="text-sm font-medium text-gray-800">
-                                        {authUserSelector.username}
-                                    </span>
+
                                     {/* Chevron Icon */}
                                     <ChevronUp className="ml-auto text-gray-500" />
                                 </SidebarMenuButton>

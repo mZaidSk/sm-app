@@ -49,7 +49,6 @@ const Profile: React.FC = () => {
     const fetchUserInfoById = (id: string) => {
         // Dispatch action for fetching user info based on id
         dispatch(getUserById({ id }));
-        // Add your logic here to fetch data based on `username`
     };
 
     const tabsData = [
@@ -120,20 +119,34 @@ const Profile: React.FC = () => {
                         </div>
 
                         <div className="flex gap-3">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className="rounded-full border-gray-300 hover:border-gray-400 shadow-sm"
-                            >
-                                Edit Profile
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="rounded-full hover:bg-gray-100"
-                            >
-                                <Settings className="w-6 h-6 text-gray-600" />
-                            </Button>
+                            {!id ? (
+                                <>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="rounded-full border-gray-300 hover:border-gray-400 shadow-sm"
+                                    >
+                                        Edit Profile
+                                    </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="rounded-full hover:bg-gray-100"
+                                    >
+                                        <Settings className="w-6 h-6 text-gray-600" />
+                                    </Button>
+                                </>
+                            ) : (
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="rounded-full border-gray-300 hover:border-gray-400 shadow-sm"
+                                >
+                                    {userSelector.isFollowing
+                                        ? "Unfriend"
+                                        : "Friend"}
+                                </Button>
+                            )}
                         </div>
                     </div>
 

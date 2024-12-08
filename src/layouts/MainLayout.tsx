@@ -155,7 +155,7 @@ const MainLayout = () => {
                         <Bell className="text-gray-500 cursor-pointer" />
                     </div>
                 </header>
-                <main className="bg-gray-50 flex-1 p-6">
+                <main className="bg-gray-50 flex-1">
                     <Outlet />
                 </main>
             </div>

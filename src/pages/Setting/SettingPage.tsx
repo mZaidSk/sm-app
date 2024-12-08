@@ -1,5 +1,4 @@
 import { useState } from "react";
-import EditProfile from "./Edit/EditProfile";
 import {
     ChevronRight,
     GlobeLock,
@@ -9,6 +8,14 @@ import {
 } from "lucide-react";
 import { Route, Routes } from "react-router-dom";
 import SettingLayout from "./layout/SettingLayout";
+import HistoryLikes from "./components/HistoryLikes";
+import HistoryComments from "./components/HistoryComments";
+import GeneralHelp from "./components/GeneralHelp";
+import GeneralFaq from "./components/GeneralFaq";
+import TPtandc from "./components/TPtandc";
+import TPpandp from "./components/TPpandp";
+import ProfileEdit from "./components/ProfileEdit";
+import ProfilePassword from "./components/ProfilePassword";
 
 const settingsSections = [
     { label: "Edit Profile", key: "edit-profile", icon: UserPen },
@@ -19,65 +26,21 @@ const settingsSections = [
 
 
 const SettingPage = () => {
-    const [activeSection, setActiveSection] = useState("edit-profile");
-const [historySection, setHistorySection] = useState<"Like" | "Comments">("Like");
-    const renderContent = () => {
-        switch (activeSection) {
-            case "edit-profile":
-                return (
-                        <EditProfile />
-                    //>
-                );
-            case "history":
-                return <h1>HISTORY</h1>;
-            case "help":
-                return <h1>HELP</h1>;
-            case "privacy":
-                return <h1>PRIVACY</h1>;
-            default:
-                return <EditProfile />;
-        }
-    };
-
     return (
-        //         <div className="max-w-9xl p-4 pt-1">
-        //             <h2 className="text-xl font-bold mb-5">Settings</h2>
-        //             <div className="flex">
-
-        //             <div className="w-1/4 border-r pr-4">
-        //     {settingsSections.map((section) => (
-        //         <button
-        //             key={section.key}
-        //             className={`block w-full text-left p-3 mb-2 rounded-lg transition-colors duration-200 ${
-        //                 activeSection === section.key
-        //                     ? "bg-zinc-100 text-zinc-700 font-semibold border-l-4 border-Zinc-500"
-        //                     : "hover:bg-gray-100"
-        //             }`}
-        //             onClick={() => setActiveSection(section.key)}
-        //         >
-        //             <div className="flex items-center gap-3">
-        //                 {/* <span className="text-md"><ChevronRight/></span>  */}
-        //                 <section.icon/>
-        //                 {section.label}
-        //             </div>
-        //         </button>
-        //     ))}
-        // </div>
-
-        //                 {/* Content */}
-        //                 <div className="w-3/4 pl-6">{renderContent()}</div>
-        //             </div>
-        //         </div>
-
         <Routes>
             <Route element={<SettingLayout />}>
-                <Route path="edit-profile" element={<EditProfile />} />
-                <Route path="history" element={<EditProfile />}>
-                    <Route index element={<EditProfile />} />
-                    <Route path="comments" element={<EditProfile />} />{" "}
-                    setting/history/comments
-                </Route>
-                <Route path="help" element={<EditProfile />} />
+                <Route index element={<ProfileEdit />} />
+                <Route path="edit-profile" element={<ProfileEdit />} />
+                <Route path="change-password" element={<ProfilePassword />} />
+
+                <Route path="likes" element={<HistoryLikes />} />
+                <Route path="comments" element={<HistoryComments />} />
+
+                <Route path="help" element={<GeneralHelp />} />
+                <Route path="faq" element={<GeneralFaq />} />
+
+                <Route path="tandc" element={<TPtandc />} />
+                <Route path="pandp" element={<TPpandp />} />
             </Route>
         </Routes>
     );
