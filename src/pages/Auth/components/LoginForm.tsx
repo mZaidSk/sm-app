@@ -42,6 +42,7 @@ export function LoginForm() {
             .then(() => {
                 // After successful login, navigate to the home page
                 navigate("/"); // Redirect to '/'
+                window.location.reload();
             })
             .catch((error) => {
                 // Handle login failure (optional)

@@ -7,6 +7,7 @@ import {
     MessageCircle,
     Search,
     Settings,
+    SquarePlus,
     User2,
 } from "lucide-react";
 
@@ -41,20 +42,22 @@ const items = [
         icon: Home,
     },
     {
-        title: "Chat",
-        url: "/chat",
-        icon: MessageCircle,
-    },
-    {
-        title: "Calendar",
-        url: "#",
-        icon: Calendar,
-    },
-    {
         title: "Search",
         url: "#",
         icon: Search,
     },
+
+    {
+        title: "Post",
+        url: "/post",
+        icon: SquarePlus,
+    },
+    {
+        title: "Chat",
+        url: "/chat",
+        icon: MessageCircle,
+    },
+
     {
         title: "Settings",
         url: "#",
@@ -69,6 +72,7 @@ export function AppSidebar() {
 
     const handleLogout = () => {
         dispatch(logout());
+        window.location.reload();
     };
 
     return (
@@ -79,16 +83,16 @@ export function AppSidebar() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <SidebarMenuButton className="py-5">
-                                    <Home /> Select Workspace
+                                    <Home /> LatZio
                                     <ChevronDown className="ml-auto" />
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
                                 <DropdownMenuItem>
-                                    <span>Acme Inc</span>
+                                    <span>Privacy Policy</span>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <span>Acme Corp.</span>
+                                    <span>Term & Conditions</span>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -154,9 +158,7 @@ export function AppSidebar() {
                                         <span>Profile</span>
                                     </DropdownMenuItem>
                                 </Link>
-                                <DropdownMenuItem>
-                                    <span>Setting</span>
-                                </DropdownMenuItem>
+
                                 <DropdownMenuItem
                                     onClick={() => handleLogout()}
                                     className="cursor-pointer"

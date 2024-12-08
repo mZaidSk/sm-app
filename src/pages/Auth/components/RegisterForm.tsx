@@ -70,8 +70,6 @@ const RegisterForm = () => {
             status: Status.Active,
         };
 
-        console.log(payload);
-
         // Dispatch login action
         dispatch(
             registerUser({
@@ -89,7 +87,8 @@ const RegisterForm = () => {
         )
             .unwrap()
             .then(() => {
-                navigate("/login");
+                window.location.reload();
+                navigate("/");
             })
             .catch((error) => {
                 console.error("Registration failed", error);

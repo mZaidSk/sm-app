@@ -9,7 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { LogOut, User, Settings, Search } from "lucide-react";
+import {
+    LogOut,
+    User,
+    Settings,
+    Search,
+    UserPlus,
+    Bell,
+    UserRoundPlus,
+} from "lucide-react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { AppSidebar } from "./Sidebar";
 import { AppDispatch, RootState } from "@/store/store";
@@ -59,6 +67,7 @@ const MainLayout = () => {
     const handleLogout = () => {
         dispatch(logout());
         navigate("/auth");
+        window.location.reload();
     };
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,34 +144,15 @@ const MainLayout = () => {
                         )}
                     </div>
                     <div className="flex items-center space-x-4">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Avatar>
-                                    <AvatarImage
-                                        src={
-                                            authUserSelector?.profilePictureUrl
-                                        }
-                                    />
-                                    <AvatarFallback>
-                                        {authUserSelector?.firstName[0]}
-                                    </AvatarFallback>
-                                </Avatar>
-                                {/* <p>username</p> */}
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuItem>
-                                    <User className="mr-2" />
-                                    <Link to={"profile"}>Profile</Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Settings className="mr-2" />
-                                    Settings
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={handleLogout}>
-                                    <LogOut className="mr-2" /> Logout
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <div className="relative inline-block">
+                            {/* Icon */}
+                            <UserRoundPlus className="text-gray-500 cursor-pointer" />
+
+                            {/* Badge */}
+                            <span className="absolute -top-1 -right-1 flex h-2 w-2 items-center justify-center rounded-full bg-red-400 text-xs font-bold"></span>
+                        </div>
+
+                        <Bell className="text-gray-500 cursor-pointer" />
                     </div>
                 </header>
                 <main className="bg-gray-50 flex-1 p-6">
