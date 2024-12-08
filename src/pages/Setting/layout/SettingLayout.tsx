@@ -1,6 +1,19 @@
 import React from "react";
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
-import { Link, Outlet } from "react-router-dom";
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarInset,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarProvider,
+} from "@/components/ui/sidebar";
+import { Outlet } from "react-router-dom";
+import { SettingSidebar } from "./SettingSidebar";
 
 // Sidebar menu items
 const menuItems = [
@@ -33,30 +46,19 @@ const menuItems = [
 
 function SettingLayout() {
     return (
-        <div className="flex min-h-screen relative">
-            {/* Sidebar */}
-            <div className="w-64 bg-gray-800 text-white p-6 absolute top-0 left-0">
-                <h2 className="text-2xl font-bold mb-4">Settings</h2>
-                <div className="space-y-4">
-                    {menuItems.map((item) => (
-                        <Link
-                            key={item.title}
-                            to={item.url}
-                            className="flex items-center gap-2 text-sm font-medium hover:bg-gray-700 p-2 rounded-md"
-                        >
-                            <item.icon className="h-5 w-5" />
-                            <span>{item.title}</span>
-                        </Link>
-                    ))}
-                </div>
-            </div>
+        <div className="!h-[90vh] overflow-hidden">
+            <SidebarProvider className="flex h-full items-start">
+                {/* Sidebar with fixed height */}
+                <SettingSidebar className="flex-shrink-0 w-64 bg-blue-200 h-full overflow-auto" />
 
-            {/* Main Content */}
-            <main className="flex-1 p-6 ml-64">
-                <div>
-                    <Outlet />
-                </div>
-            </main>
+                {/* Scrollable content area */}
+                <SidebarInset className="flex-1 h-full overflow-y-auto bg-red-200">
+                    <div className="gap-4 p-4 overflow-y-auto">
+                        {/* Outlet or other content */}
+                        <Outlet />
+                    </div>
+                </SidebarInset>
+            </SidebarProvider>
         </div>
     );
 }

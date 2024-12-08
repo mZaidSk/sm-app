@@ -44,7 +44,7 @@ function AppRouter() {
                             />
                             <Route path="/post/*" element={<PostPage />} />
                             <Route
-                                path="/setting/*"
+                                path="/settings/*"
                                 element={<SettingPage />}
                             />
                             <Route path="*" element={<Navigate to="/" />} />
