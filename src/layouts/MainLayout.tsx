@@ -1,34 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-    DropdownMenu,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-    DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import {
-    LogOut,
-    User,
-    Settings,
-    Search,
-    UserPlus,
-    Bell,
-    UserRoundPlus,
-} from "lucide-react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Search, Bell } from "lucide-react";
+import { Outlet } from "react-router-dom";
 import { AppSidebar } from "./Sidebar";
 import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "@/store/slice/AuthSlice";
+import FriendRequestPopover from "@/components/common/FriendRequestPopover";
+import { getPendingRequests } from "@/store/slice/FriendSlice";
 
 const MainLayout = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate(); // Initialize useNavigate hook
 
-    const authUserSelector = useSelector((state: RootState) => state.auth.user);
+    // const authUserSelector = useSelector((state: RootState) => state.auth.user);
     const [searchTerm, setSearchTerm] = useState("");
     const [suggestions, setSuggestions] = useState<
         {
@@ -64,11 +50,9 @@ const MainLayout = () => {
         };
     }, []);
 
-    const handleLogout = () => {
-        dispatch(logout());
-        navigate("/auth");
-        window.location.reload();
-    };
+    useEffect(() => {
+        fetchPendingRequest();
+    }, []);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -88,6 +72,15 @@ const MainLayout = () => {
     const handleSuggestionClick = (suggestion: string) => {
         setSearchTerm(suggestion);
         setShowSuggestions(false);
+    };
+
+    const pendingRequests = [
+        { name: "John Doe", requestDate: "2024-12-05" },
+        { name: "Jane Smith", requestDate: "2024-12-07" },
+    ]; // Example pending requests
+
+    const fetchPendingRequest = () => {
+        dispatch(getPendingRequests());
     };
 
     return (
@@ -144,14 +137,7 @@ const MainLayout = () => {
                         )}
                     </div>
                     <div className="flex items-center space-x-4">
-                        <div className="relative inline-block">
-                            {/* Icon */}
-                            <UserRoundPlus className="text-gray-500 cursor-pointer" />
-
-                            {/* Badge */}
-                            <span className="absolute -top-1 -right-1 flex h-2 w-2 items-center justify-center rounded-full bg-red-400 text-xs font-bold"></span>
-                        </div>
-
+                        <FriendRequestPopover />
                         <Bell className="text-gray-500 cursor-pointer" />
                     </div>
                 </header>

@@ -3,7 +3,17 @@ import instance from "./instance";
 const url = "friend";
 
 // Get the list of friends
-export const getFriendList = () => instance.get(`${url}/list`);
+export const getFriendListApi = (userId?: string) => {
+    // Build the API URL dynamically based on whether userId is provided
+    let apiUrl = `${url}/list`;
+
+    // Add userId as a query parameter if it's provided
+    if (userId) {
+        apiUrl += `?userId=${userId}`;
+    }
+
+    return instance.get(apiUrl);
+};
 
 // Get the list of pending friend requests
 export const getPendingRequestsApi = () =>

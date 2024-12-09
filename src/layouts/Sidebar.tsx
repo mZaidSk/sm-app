@@ -127,7 +127,11 @@ export function AppSidebar() {
                         <SidebarMenu>
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild size="lg">
+                                    <SidebarMenuButton
+                                        asChild
+                                        size="lg"
+                                        tooltip={item.title}
+                                    >
                                         {/* <Link to={item.url}>
                                             <item.icon />
                                             <span>{item.title}</span>
@@ -135,7 +139,10 @@ export function AppSidebar() {
 
                                         <Link to={item.url}>
                                             <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
-                                                <item.icon size={24} />
+                                                <item.icon
+                                                    size={24}
+                                                    color="gray"
+                                                />
                                             </div>
                                             <div className="flex flex-col gap-0.5 leading-none">
                                                 <span className="font-semibold">
