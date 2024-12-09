@@ -58,17 +58,16 @@ const menuItems = [
 ];
 
 function SettingLayout() {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     
     return (
         <div className="!h-[90vh] overflow-hidden">
             <SidebarProvider className="flex h-full items-start">
                 {/* Sidebar with fixed height */}
-                <SettingSidebar className="flex-shrink-0 w-64 bg-blue-200 h-full overflow-auto" />
+                <SettingSidebar className="flex-shrink-0 w-64 h-full overflow-auto" />
 
                 {/* Scrollable content area */}
-                <SidebarInset className="flex-1 h-full overflow-y-auto bg-red-200">
+                <SidebarInset className="flex-1 h-full overflow-y-auto">
                     <div className="gap-4 p-4 overflow-y-auto">
                         {/* Outlet or other content */}
                         <Outlet />
