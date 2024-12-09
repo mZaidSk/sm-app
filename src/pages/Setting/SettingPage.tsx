@@ -24,6 +24,7 @@ const settingsSections = [
     { label: "Privacy", key: "privacy", icon: GlobeLock },
 ];
 
+
 const SettingPage = () => {
     return (
         <Routes>

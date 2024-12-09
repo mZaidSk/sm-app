@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
 import {
     Sidebar,
@@ -18,41 +18,56 @@ import { SettingSidebar } from "./SettingSidebar";
 // Sidebar menu items
 const menuItems = [
     {
-        title: "Home",
-        url: "#",
+        title: 'Edit Profile',
+        url: '/setting/edit-profile',
         icon: Home,
     },
     {
-        title: "Inbox",
-        url: "#",
-        icon: Inbox,
+        title: 'Password',
+        url: '/setting/password',
+        icon: Home,
+    },
+    
+    {
+        title: "History",
+        icon: Home,
+        subMenu: [
+            {
+                title: "Likes",
+                url: "/setting/history/likes",
+                icon: Home,
+            },
+            {
+                title: "Comments",
+                url: "/setting/history/comments",
+                icon: Home,
+            },
+        ],
     },
     {
-        title: "Calendar",
-        url: "#",
-        icon: Calendar,
+        title: 'Help',
+        url: '/setting/help',
+        icon: Home,
     },
     {
-        title: "Search",
-        url: "#",
-        icon: Search,
+        title: 'Privacy',
+        url: '/setting/privacy',
+        icon: Home,
     },
-    {
-        title: "Settings",
-        url: "#",
-        icon: Settings,
-    },
+    
 ];
 
 function SettingLayout() {
+
+    
     return (
         <div className="!h-[90vh] overflow-hidden">
             <SidebarProvider className="flex h-full items-start">
                 {/* Sidebar with fixed height */}
-                <SettingSidebar className="flex-shrink-0 w-64 bg-blue-200 h-full overflow-auto" />
+                <SettingSidebar className="flex-shrink-0 w-64 h-full overflow-auto" />
 
                 {/* Scrollable content area */}
-                <SidebarInset className="flex-1 h-full overflow-y-auto bg-red-200">
+                <SidebarInset className="flex-1 h-full overflow-y-auto">
                     <div className="gap-4 p-4 overflow-y-auto">
                         {/* Outlet or other content */}
                         <Outlet />

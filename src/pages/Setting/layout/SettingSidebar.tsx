@@ -82,7 +82,7 @@ export function SettingSidebar({
     ...props
 }: React.ComponentProps<typeof Sidebar>) {
     return (
-        <Sidebar {...props} collapsible="none" className="bg-blue-200">
+        <Sidebar {...props} collapsible="none">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
