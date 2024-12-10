@@ -30,7 +30,7 @@ const Post = ({ post }: any) => {
             </CardHeader>
 
             {/* Card Content */}
-            <CardContent className="p-4">
+            <CardContent className="p-0">
                 <PostContent content={post} />
             </CardContent>
 

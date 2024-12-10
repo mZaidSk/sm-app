@@ -16,7 +16,7 @@ export const transformFriendListData = (
             friend.user.id === loggedInUserId ? friend.friend : friend.user;
         return {
             username: otherUser.username,
-            name: `${otherUser.firstName} ${otherUser.lastName}`,
+            name: `${otherUser.firstName}`,
             profileImage: otherUser.profilePictureUrl,
             isFriend: friendsIds.has(otherUser.id), // Check if already a friend
         };

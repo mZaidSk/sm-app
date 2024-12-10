@@ -10,15 +10,15 @@ interface PostContentProps {
 
 const PostContent: React.FC<PostContentProps> = ({ content }) => {
     return (
-        <div className="border p-2 rounded-lg shadow-md">
+        <div className="border shadow-md">
             {/* Check if the postType is TEXT or IMAGE */}
             {content.postType === "TEXT" ? (
-                <p className="text-lg text-gray-700">{content.content}</p>
+                <p className="text-lg text-gray-700 p-4">{content.content}</p>
             ) : content.postType === "IMAGE" && content.mediaUrl ? (
                 <img
                     src={content.mediaUrl}
                     alt="Content"
-                    className="w-full h-64 object-cover rounded-lg" // Set fixed height, width, and object-fit
+                    className="w-full h-auto object-cover" // Set fixed height, width, and object-fit
                 />
             ) : (
                 <p className="text-red-500">Invalid content type</p>

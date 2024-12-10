@@ -9,60 +9,47 @@ import {
 import FollowButton from "@/pages/Home/components/FollowButton"; // Adjust import if necessary
 import AvatarContainer from "@/components/common/AvatarConatiner";
 
-type FollowHandler = (username: string) => void;
-// Props for FriendsSheet
-interface FriendsSheetProps {
-    friendsList: Array<{
-        username: string;
-        name: string;
-        profileImage: string;
-        isFriend: boolean;
-    }>;
-    onFollow: FollowHandler;
-    onUnfollow: FollowHandler;
-}
-
-const FriendsSheet: React.FC<FriendsSheetProps> = ({
-    friendsList,
-    onFollow,
-    onUnfollow,
-}) => {
-    console.log(friendsList);
+const FriendsSheet: React.FC<any> = ({ friendsList, onFollow, onUnfollow }) => {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <span className="cursor-pointer text-lg font-medium hover:text-primary transition-colors">
-                    Friends
+                <span className="cursor-pointer text-lg font-medium hover:text-blue-600 transition-colors">
+                    Friend
                 </span>
             </SheetTrigger>
-            <SheetContent className="flex flex-col max-w-xl mx-auto overflow-hidden">
-                <SheetHeader className="flex justify-between items-center">
-                    <SheetTitle className="text-2xl font-bold">
-                        Friends
+            <SheetContent className="max-w-lg mx-auto flex flex-col overflow-hidden  bg-white shadow-md">
+                {/* Simplified Header */}
+                <SheetHeader className="p-3 border-b border-gray-200">
+                    <SheetTitle className="text-xl font-semibold text-gray-800">
+                        Friend List
                     </SheetTitle>
                 </SheetHeader>
-                <div className="flex-1 overflow-y-auto space-y-4 p-4 bg-slate-50 rounded-lg shadow-md">
+
+                {/* Friends List */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
                     {friendsList.length > 0 ? (
-                        friendsList.map((friend) => (
+                        friendsList.map((friend: any) => (
                             <div
                                 key={friend.username}
-                                className="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                                className="flex items-center justify-between p-4 bg-gray-50 rounded-md border border-gray-200 hover:shadow transition-shadow duration-200"
                             >
+                                {/* Avatar and Friend Info */}
                                 <div className="flex items-center space-x-4">
                                     <AvatarContainer
                                         username={friend.username}
                                         profileImage={friend.profileImage}
                                     />
                                     <div>
-                                        <p className="text-lg font-semibold">
+                                        <p className="text-base font-medium text-gray-900">
                                             {friend.name}
                                         </p>
-                                        <p className="text-xs text-gray-500">
-                                            {friend.username}
+                                        <p className="text-sm text-gray-500">
+                                            @{friend.username}
                                         </p>
                                     </div>
                                 </div>
 
+                                {/* Follow Button */}
                                 <FollowButton
                                     isFollowing={friend.isFriend}
                                     onFollow={() => onFollow(friend.username)}

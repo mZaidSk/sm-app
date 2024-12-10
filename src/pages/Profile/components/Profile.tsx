@@ -158,7 +158,7 @@ const Profile: React.FC = () => {
                                     size="sm"
                                     className="rounded-full border-gray-300 hover:border-gray-400 shadow-sm"
                                 >
-                                    {userSelector.isFollowing
+                                    {userSelector.isFriend
                                         ? "Unfriend"
                                         : "Friend"}
                                 </Button>

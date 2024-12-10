@@ -35,7 +35,7 @@ const ProfilePosts: React.FC<ProfilePostsProps> = ({
                 <div className="space-y-4">
                     {/* Posts Container */}
                     {postType == "IMAGE" ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto py-10 px-4">
+                        <div className="grid grid-cols-1 gap-6 max-w-2xl mx-auto py-10 px-4">
                             {/* Rendering the Posts */}
                             {posts
                                 ?.filter(
