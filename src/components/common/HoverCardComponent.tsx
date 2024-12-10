@@ -21,9 +21,9 @@ const HoverCardComponent: React.FC<HoverCardProps> = ({
     return (
         <div>
             <HoverCard>
-                <HoverCardTrigger asChild>
+                {/* <HoverCardTrigger asChild>
+                </HoverCardTrigger> */}
                     <div className="font-semibold cursor-pointer">{name}</div>
-                </HoverCardTrigger>
                 <UserProfileCard
                     name={name}
                     username={username}

@@ -47,7 +47,6 @@ const GeneralHelp = () => {
   };
 
   return <div className="m-4  p-6">
-    <Label className="text-lg mb-3">Help</Label>
     <div className="flex flex-row items-center gap-6 p-2 mt-3 border-b">
       <div className="flex items-center space-x-4">
         <Avatar className={"w-[8%] h-[8%]"}>

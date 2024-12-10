@@ -22,6 +22,7 @@ const Post = ({ post }: any) => {
             {/* Card Header */}
             <CardHeader className="p-4 border-b border-gray-200 bg-gray-50">
                 <PostHeader
+                    id={userData.id}
                     name={userData.firstName}
                     username={userData.username}
                     profileImage={userData.profilePictureUrl}
