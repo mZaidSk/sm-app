@@ -9,6 +9,7 @@ import {
     getFriendListApi,
     getPendingRequestsApi,
     getSuggestFriendsApi,
+    removeFriendApi,
     sendFriendRequestApi,
 } from "@/services/FriendService";
 
@@ -31,6 +32,20 @@ export const acceptFriendRequest = createAsyncThunk(
     async ({ friendId }: { friendId: string }, { rejectWithValue }) => {
         try {
             const response = await acceptFriendRequestApi(friendId);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data || "Failed to send friend request"
+            );
+        }
+    }
+);
+
+export const removeFriend = createAsyncThunk(
+    "friend/removeFriend",
+    async ({ requestId }: { requestId: string }, { rejectWithValue }) => {
+        try {
+            const response = await removeFriendApi(requestId);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(
@@ -135,6 +150,21 @@ const friendSlice = createSlice({
             })
             .addCase(
                 acceptFriendRequest.rejected,
+                (state, action: PayloadAction<any>) => {
+                    state.loading = false;
+                    state.error = action.payload || "Failed to fetch friends";
+                }
+            )
+
+            .addCase(removeFriend.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(removeFriend.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(
+                removeFriend.rejected,
                 (state, action: PayloadAction<any>) => {
                     state.loading = false;
                     state.error = action.payload || "Failed to fetch friends";

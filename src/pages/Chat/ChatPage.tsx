@@ -42,7 +42,7 @@ const ChatPage = () => {
             <div className="flex flex-1 overflow-hidden">
                 {/* Left side: Chat Room */}
                 <div className="flex-1 border-r border-gray-300 h-full overflow-auto">
-                    <ChatRoom chatId={selectedChatId} />
+                    <ChatRoom chatId={"selectedChatId"} />
                 </div>
 
                 {/* Right side: Chat List */}

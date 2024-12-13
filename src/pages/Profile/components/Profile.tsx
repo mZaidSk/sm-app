@@ -12,101 +12,139 @@ import { getUser, getUserById } from "@/store/slice/UserSlice";
 import ProfilePosts from "./ProfilePosts";
 import FriendsSheet from "./FriendSheet";
 import Loader from "@/components/common/Loader";
-import { getFriendList } from "@/store/slice/FriendSlice";
+import {
+    acceptFriendRequest,
+    getFriendList,
+    getPendingRequests,
+    removeFriend,
+    sendFriendRequest,
+} from "@/store/slice/FriendSlice";
 import { transformFriendListData } from "@/lib/utils";
 
-const friendsList = [
-    {
-        username: "lathika09",
-        name: "Lathika",
-        profileImage: "/profile-img/p1-cat.jpg",
-        isFollowing: true,
-    },
-    {
-        username: "zaid08",
-        name: "Zaid",
-        profileImage: "https://github.com/shadcn.png",
-        isFollowing: false,
-    },
-];
-
 const Profile: React.FC = () => {
-    const { id } = useParams<{ id: string }>(); // Retrieve the id from the route
+    const { id } = useParams<{ id: string }>();
     const dispatch = useDispatch<AppDispatch>();
-    const userSelector = useSelector(
-        (state: RootState) => state.user.user || {}
-    );
-    const userFriendSelector = useSelector(
+
+    // Selectors
+    const authUser = useSelector((state: RootState) => state.auth.user || {});
+    const user = useSelector((state: RootState) => state.user.user || {});
+    const friendList = useSelector(
         (state: RootState) => state.friend.friendList
     );
     const isLoading = useSelector((state: RootState) => state.user.loading);
 
+    // Fetch user and friend data
     useEffect(() => {
         if (id) {
-            fetchUserInfoById(id);
+            dispatch(getUserById({ id }));
         } else {
-            fetchUserInfo();
+            dispatch(getUser());
         }
-        fetchUserFriends();
-    }, [id]);
+        dispatch(getFriendList({ userId: id || undefined }));
+    }, [id, dispatch]);
 
-    const fetchUserInfo = () => {
-        dispatch(getUser());
+    const handleFriendAction = async (action: string, requestId?: string) => {
+        try {
+            switch (action) {
+                case "UNFRIEND":
+                case "CANCEL_REQUEST":
+                    if (requestId) {
+                        await dispatch(removeFriend({ requestId }));
+                    }
+                    break;
+                case "ACCEPT_REQUEST":
+                    if (id) {
+                        await dispatch(acceptFriendRequest({ friendId: id }));
+                    }
+                    break;
+                case "ADD_FRIEND":
+                    if (id) {
+                        await dispatch(sendFriendRequest({ friendId: id }));
+                    }
+                    break;
+                default:
+                    return; // Exit if the action is not recognized
+            }
+
+            // Common actions after friend-related updates
+            if (id) {
+                await dispatch(getUserById({ id }));
+            } else {
+                await dispatch(getUser());
+            }
+            await dispatch(getPendingRequests());
+        } catch (error) {
+            console.error("Error handling friend action:", error);
+        }
     };
 
-    const fetchUserInfoById = (id: string) => {
-        // Dispatch action for fetching user info based on id
-        dispatch(getUserById({ id }));
+    const renderFriendButton = () => {
+        const {
+            friend_status: status,
+            friend_id,
+            friend_initiatedBy,
+        } = user.friend || {};
+
+        switch (status) {
+            case "ACCEPTED":
+                return (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full border-gray-300 hover:border-gray-400 shadow-sm"
+                        onClick={() =>
+                            handleFriendAction("UNFRIEND", friend_id)
+                        }
+                    >
+                        Unfriend
+                    </Button>
+                );
+            case "PENDING":
+                return (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full border-gray-300 hover:border-gray-400 shadow-sm"
+                        onClick={() =>
+                            handleFriendAction(
+                                authUser.id === friend_initiatedBy
+                                    ? "CANCEL_REQUEST"
+                                    : "ACCEPT_REQUEST",
+                                friend_id
+                            )
+                        }
+                    >
+                        {authUser.id === friend_initiatedBy
+                            ? "Cancel Request"
+                            : "Accept Request"}
+                    </Button>
+                );
+            default:
+                return (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full border-gray-300 hover:border-gray-400 shadow-sm"
+                        onClick={() => handleFriendAction("ADD_FRIEND")}
+                    >
+                        Add Friend
+                    </Button>
+                );
+        }
     };
 
-    const fetchUserFriends = () => {
-        if (id) dispatch(getFriendList({ userId: id }));
-        else dispatch(getFriendList({}));
+    const renderTabsContent = (key: string, filterType: string) => {
+        const filteredPosts = user.posts?.filter(
+            (post: any) => post.postType === filterType
+        );
+        return filteredPosts?.length ? (
+            <ProfilePosts posts={filteredPosts} postType={filterType} />
+        ) : (
+            <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">No {key} available.</p>
+            </div>
+        );
     };
-
-    const tabsData = [
-        {
-            label: "Posts",
-            key: "posts",
-        },
-        {
-            label: "Text Posts",
-            key: "text-posts",
-        },
-    ];
-
-    const renderEmptyState = (message: string) => (
-        <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">{message}</p>
-        </div>
-    );
-
-    const handleFollow = (username: any) => {
-        // setFriends((prev) =>
-        //     prev.map((friend) =>
-        //         friend.username === username
-        //             ? { ...friend, isFollowing: true }
-        //             : friend
-        //     )
-        // );
-    };
-
-    const handleUnfollow = (username: any) => {
-        // setFriends((prev) =>
-        //     prev.map((friend) =>
-        //         friend.username === username
-        //             ? { ...friend, isFollowing: false }
-        //             : friend
-        //     )
-        // );
-    };
-
-    const friendsIds = new Set([id]);
-    const transformedFriendsList = transformFriendListData(
-        userFriendSelector,
-        userSelector?.id,
-        friendsIds
-    );
 
     return (
         <Card className="max-w-5xl mx-auto p-6 bg-gradient-to-tr from-gray-50 via-white to-gray-100 shadow-xl rounded-lg border border-gray-200 transition-all duration-300 hover:shadow-2xl">
@@ -115,10 +153,9 @@ const Profile: React.FC = () => {
             ) : (
                 <>
                     <CardHeader className="flex flex-col md:flex-row items-center gap-8">
-                        {/* Profile Picture */}
                         <Avatar className="w-40 h-40 ring-2 ring-primary shadow-md">
                             <AvatarImage
-                                src={userSelector.profilePictureUrl}
+                                src={user.profilePictureUrl}
                                 alt="Profile Picture"
                                 className="object-cover rounded-full"
                             />
@@ -127,16 +164,15 @@ const Profile: React.FC = () => {
                             </AvatarFallback>
                         </Avatar>
 
-                        {/* User Info */}
                         <div className="flex flex-col w-full gap-2">
                             <div className="flex justify-between items-center">
                                 <div>
                                     <h2 className="text-2xl font-bold tracking-wide">
-                                        {userSelector.firstName || "John"}{" "}
-                                        {userSelector.lastName || "Doe"}
+                                        {user.firstName || "John"}{" "}
+                                        {user.lastName || "Doe"}
                                     </h2>
                                     <h4 className="text-lg font-medium text-gray-500">
-                                        @{userSelector.username || "username"}
+                                        @{user.username || "username"}
                                     </h4>
                                 </div>
 
@@ -159,20 +195,11 @@ const Profile: React.FC = () => {
                                             </Button>
                                         </>
                                     ) : (
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="rounded-full border-gray-300 hover:border-gray-400 shadow-sm"
-                                        >
-                                            {userSelector.isFriend
-                                                ? "Unfriend"
-                                                : "Friend"}
-                                        </Button>
+                                        renderFriendButton()
                                     )}
                                 </div>
                             </div>
 
-                            {/* Stats */}
                             <div className="flex gap-8 text-gray-600 text-sm">
                                 {["Posts", "Friends"].map((label, index) => (
                                     <div
@@ -180,23 +207,17 @@ const Profile: React.FC = () => {
                                         className="hover:text-gray-900 cursor-pointer transition-all duration-300"
                                     >
                                         <strong className="block text-xl font-semibold">
-                                            {
-                                                [
-                                                    userSelector?.posts
-                                                        ?.length || 0,
-                                                    userSelector?.friends
-                                                        ?.length || 0,
-                                                ][index]
-                                            }
+                                            {label === "Posts"
+                                                ? user.posts?.length || 0
+                                                : user.friends?.length || 0}
                                         </strong>
-
                                         {label === "Friends" ? (
                                             <FriendsSheet
-                                                friendsList={
-                                                    transformedFriendsList
-                                                }
-                                                onFollow={handleFollow}
-                                                onUnfollow={handleUnfollow}
+                                                friendsList={transformFriendListData(
+                                                    friendList,
+                                                    user.id,
+                                                    new Set([id])
+                                                )}
                                             />
                                         ) : (
                                             label
@@ -205,24 +226,24 @@ const Profile: React.FC = () => {
                                 ))}
                             </div>
 
-                            {/* Bio */}
                             <p className="text-gray-700 text-base">
-                                {userSelector?.bio || "No bio available"}
+                                {user.bio || "No bio available"}
                             </p>
                         </div>
                     </CardHeader>
 
                     <Separator className="my-4" />
 
-                    {/* Tabs Section */}
                     <Tabs defaultValue="posts" className="w-full">
                         <div className="flex justify-end">
                             <TabsList className="border-b border-gray-200">
-                                {tabsData.map((tab) => (
+                                {[
+                                    { label: "Posts", key: "posts" },
+                                    { label: "Text Posts", key: "text-posts" },
+                                ].map((tab) => (
                                     <TabsTrigger
                                         key={tab.key}
                                         value={tab.key}
-                                        aria-label={`View ${tab.label}`}
                                         className="text-gray-700 hover:text-primary font-medium px-6 py-2 border-b-2 transition-all duration-300 hover:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                                     >
                                         {tab.label}
@@ -232,29 +253,11 @@ const Profile: React.FC = () => {
                         </div>
 
                         <TabsContent value="posts">
-                            {userSelector?.posts?.filter(
-                                (post: any) => post.postType === "IMAGE"
-                            ).length ? (
-                                <ProfilePosts
-                                    posts={userSelector.posts}
-                                    postType="IMAGE"
-                                />
-                            ) : (
-                                renderEmptyState("No posts available.")
-                            )}
+                            {renderTabsContent("posts", "IMAGE")}
                         </TabsContent>
 
                         <TabsContent value="text-posts">
-                            {userSelector?.posts?.filter(
-                                (post: any) => post.postType === "TEXT"
-                            ).length ? (
-                                <ProfilePosts
-                                    posts={userSelector.posts}
-                                    postType="TEXT"
-                                />
-                            ) : (
-                                renderEmptyState("No text posts available.")
-                            )}
+                            {renderTabsContent("text-posts", "TEXT")}
                         </TabsContent>
                     </Tabs>
                 </>

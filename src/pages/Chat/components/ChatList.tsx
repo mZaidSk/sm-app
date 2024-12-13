@@ -9,6 +9,99 @@ import { useDispatch, useSelector } from "react-redux";
 import websocket from "@/services/WebSocketService";
 import { setChats } from "@/store/slice/ChatSocketSlice";
 
+import * as React from "react";
+import { ArchiveX, Command, File, Inbox, Send, Trash2 } from "lucide-react";
+// import { NavUser } from "@/components/nav-user"
+import { Label } from "@/components/ui/label";
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarHeader,
+    SidebarInput,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    useSidebar,
+} from "@/components/ui/sidebar";
+
+const data = {
+    mails: [
+        {
+            name: "William Smith",
+            email: "williamsmith@example.com",
+            subject: "Meeting Tomorrow",
+            date: "09:34 AM",
+            teaser: "Hi team, just a reminder about our meeting tomorrow at 10 AM.\nPlease come prepared with your project updates.",
+        },
+        {
+            name: "Alice Smith",
+            email: "alicesmith@example.com",
+            subject: "Re: Project Update",
+            date: "Yesterday",
+            teaser: "Thanks for the update. The progress looks great so far.\nLet's schedule a call to discuss the next steps.",
+        },
+        {
+            name: "Bob Johnson",
+            email: "bobjohnson@example.com",
+            subject: "Weekend Plans",
+            date: "2 days ago",
+            teaser: "Hey everyone! I'm thinking of organizing a team outing this weekend.\nWould you be interested in a hiking trip or a beach day?",
+        },
+        {
+            name: "Emily Davis",
+            email: "emilydavis@example.com",
+            subject: "Re: Question about Budget",
+            date: "2 days ago",
+            teaser: "I've reviewed the budget numbers you sent over.\nCan we set up a quick call to discuss some potential adjustments?",
+        },
+        {
+            name: "Michael Wilson",
+            email: "michaelwilson@example.com",
+            subject: "Important Announcement",
+            date: "1 week ago",
+            teaser: "Please join us for an all-hands meeting this Friday at 3 PM.\nWe have some exciting news to share about the company's future.",
+        },
+        {
+            name: "Sarah Brown",
+            email: "sarahbrown@example.com",
+            subject: "Re: Feedback on Proposal",
+            date: "1 week ago",
+            teaser: "Thank you for sending over the proposal. I've reviewed it and have some thoughts.\nCould we schedule a meeting to discuss my feedback in detail?",
+        },
+        {
+            name: "David Lee",
+            email: "davidlee@example.com",
+            subject: "New Project Idea",
+            date: "1 week ago",
+            teaser: "I've been brainstorming and came up with an interesting project concept.\nDo you have time this week to discuss its potential impact and feasibility?",
+        },
+        {
+            name: "Olivia Wilson",
+            email: "oliviawilson@example.com",
+            subject: "Vacation Plans",
+            date: "1 week ago",
+            teaser: "Just a heads up that I'll be taking a two-week vacation next month.\nI'll make sure all my projects are up to date before I leave.",
+        },
+        {
+            name: "James Martin",
+            email: "jamesmartin@example.com",
+            subject: "Re: Conference Registration",
+            date: "1 week ago",
+            teaser: "I've completed the registration for the upcoming tech conference.\nLet me know if you need any additional information from my end.",
+        },
+        {
+            name: "Sophia White",
+            email: "sophiawhite@example.com",
+            subject: "Team Dinner",
+            date: "1 week ago",
+            teaser: "To celebrate our recent project success, I'd like to organize a team dinner.\nAre you available next Friday evening? Please let me know your preferences.",
+        },
+    ],
+};
+
 const ChatList = ({ setChatId }: { setChatId: (id: string) => void }) => {
     // const chatSelector = useSelector(
     //     (state: RootState) => state?.chat?.chats || []
@@ -38,110 +131,41 @@ const ChatList = ({ setChatId }: { setChatId: (id: string) => void }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+    const [mails, setMails] = React.useState(data.mails);
+    const { setOpen } = useSidebar();
+
     return (
-        <div className="relative h-full flex">
-            {/* Toggle Button for Mobile */}
-            <Button
-                className="fixed bottom-8 right-4 z-20 bg-gray-700 text-white lg:hidden rounded-full p-3 shadow-lg"
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            >
-                <Menu size={20} />
-            </Button>
-
-            {/* Sidebar */}
-            <div
-                className={`fixed inset-y-0 right-0 w-80 bg-gray-50 transform transition-transform ${isSidebarOpen ? "translate-x-0" : "translate-x-full"} lg:translate-x-0 lg:relative lg:w-96 lg:flex flex-col z-50`}
-            >
-                {/* Search Bar */}
-                <div className="px-4 py-5 bg-gradient-to-r from-white to-gray-100 sticky top-0 z-10 shadow-sm border-2">
-                    <Input
-                        type="text"
-                        placeholder="Search chats..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-400 focus:outline-none transition"
-                    />
-                </div>
-
-                {/* Chat List */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                    {chatSelector.length > 0 ? (
-                        chatSelector.map((chat) => (
-                            <Card
-                                className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md hover:shadow-lg border border-gray-200 transition-transform transform group-hover:scale-[1.02]"
-                                key={chat.id}
-                                onClick={() => setChatId(chat.id)} // Set chatId on click
+        <Sidebar collapsible="none" className="hidden flex-1 md:flex w-96">
+            <SidebarHeader className="gap-3.5 border-b p-4 my-4">
+                <SidebarInput placeholder="Type to search..." />
+            </SidebarHeader>
+            <SidebarContent>
+                <SidebarGroup className="px-0">
+                    <SidebarGroupContent>
+                        {mails.map((mail) => (
+                            <a
+                                href="#"
+                                key={mail.email}
+                                className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                             >
-                                {/* Avatar */}
-                                <div className="relative">
-                                    {/* <Avatar className="w-14 h-14 border-2 border-blue-500">
-                                        <AvatarImage
-                                            src={
-                                                chat?.participants[0]?.user
-                                                    ?.profilePictureUrl ||
-                                                "https://via.placeholder.com/80"
-                                            }
-                                        />
-                                        <AvatarFallback className="text-white bg-blue-500">
-                                            {chat?.participants[0]?.user?.firstName
-                                                .charAt(0)
-                                                .toUpperCase()}
-                                        </AvatarFallback>
-                                    </Avatar> */}
-                                    {/* Online Badge */}
-                                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
+                                <div className="flex w-full items-center gap-2">
+                                    <span>{mail.name}</span>{" "}
+                                    <span className="ml-auto text-xs">
+                                        {mail.date}
+                                    </span>
                                 </div>
-
-                                {/* Chat Details */}
-                                <div className="flex-1">
-                                    {/* <div className="flex justify-between items-center">
-                                        <h3 className="text-lg font-medium text-gray-800 truncate">
-                                            {
-                                                chat?.participants[0]?.user
-                                                    ?.userName
-                                            }
-                                        </h3>
-                                        <span className="text-sm text-gray-500">
-                                            {new Date(
-                                                chat.lastMessageAt
-                                            ).toLocaleTimeString([], {
-                                                hour: "2-digit",
-                                                minute: "2-digit",
-                                            })}
-                                        </span>
-                                    </div> */}
-                                    <p className="text-sm text-gray-600 truncate">
-                                        Last message at{" "}
-                                        {chat.lastMessage
-                                            ? new Date(
-                                                  chat.lastMessage
-                                              ).toLocaleDateString()
-                                            : "idk"}
-                                    </p>
-                                </div>
-                            </Card>
-                        ))
-                    ) : (
-                        <div className="text-center mt-10">
-                            <img
-                                src="https://via.placeholder.com/150"
-                                alt="No chats found"
-                                className="mx-auto mb-6 w-40 h-40 opacity-40"
-                            />
-                            <p className="text-gray-500">No chats found</p>
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* Background Overlay for Mobile */}
-            {isSidebarOpen && (
-                <div
-                    className="fixed inset-0 bg-black opacity-50 z-10 lg:hidden"
-                    onClick={() => setIsSidebarOpen(false)}
-                ></div>
-            )}
-        </div>
+                                <span className="font-medium">
+                                    {mail.subject}
+                                </span>
+                                <span className="line-clamp-2 w-[260px] whitespace-break-spaces text-xs">
+                                    {mail.teaser}
+                                </span>
+                            </a>
+                        ))}
+                    </SidebarGroupContent>
+                </SidebarGroup>
+            </SidebarContent>
+        </Sidebar>
     );
 };
 

@@ -9,7 +9,7 @@ import {
 import FollowButton from "@/pages/Home/components/FollowButton"; // Adjust import if necessary
 import AvatarContainer from "@/components/common/AvatarConatiner";
 
-const FriendsSheet: React.FC<any> = ({ friendsList, onFollow, onUnfollow }) => {
+const FriendsSheet: React.FC<any> = ({ friendsList }) => {
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -50,13 +50,13 @@ const FriendsSheet: React.FC<any> = ({ friendsList, onFollow, onUnfollow }) => {
                                 </div>
 
                                 {/* Follow Button */}
-                                <FollowButton
+                                {/* <FollowButton
                                     isFollowing={friend.isFriend}
                                     onFollow={() => onFollow(friend.username)}
                                     onUnfollow={() =>
                                         onUnfollow(friend.username)
                                     }
-                                />
+                                /> */}
                             </div>
                         ))
                     ) : (

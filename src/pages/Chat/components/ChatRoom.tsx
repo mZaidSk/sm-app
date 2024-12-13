@@ -90,13 +90,12 @@ const ChatRoom = ({ chatId }: { chatId: string | null }) => {
 
             {/* Chat Messages Area */}
             <CardContent className="flex-1 overflow-y-auto p-5 space-y-6 bg-gray-50">
-                {messages.length ? (
+                {/* {messages.length ? (
                     messages.map((mes: any) => {
                         if (mes.sender.id == localStorage.getItem("userId")) {
                             return (
                                 <div className="flex justify-end">
                                     <div className="flex items-start gap-4 flex-row-reverse max-w-lg">
-                                        {/* Sender Avatar */}
                                         <Avatar className="w-12 h-12">
                                             <AvatarImage
                                                 src="/path-to-sender-avatar.jpg"
@@ -104,7 +103,6 @@ const ChatRoom = ({ chatId }: { chatId: string | null }) => {
                                             />
                                             <AvatarFallback>J</AvatarFallback>
                                         </Avatar>
-                                        {/* Message Bubble */}
                                         <div>
                                             <div className="bg-gray-700 text-white p-4 shadow-sm rounded-lg">
                                                 {mes.content}
@@ -119,7 +117,6 @@ const ChatRoom = ({ chatId }: { chatId: string | null }) => {
                         } else {
                             <div className="flex justify-start">
                                 <div className="flex items-start gap-4 max-w-lg">
-                                    {/* Receiver Avatar */}
                                     <Avatar className="w-12 h-12">
                                         <AvatarImage
                                             src="/path-to-receiver-avatar.jpg"
@@ -127,7 +124,6 @@ const ChatRoom = ({ chatId }: { chatId: string | null }) => {
                                         />
                                         <AvatarFallback>S</AvatarFallback>
                                     </Avatar>
-                                    {/* Message Bubble */}
                                     <div>
                                         <div className="bg-gray-300 p-4 text-gray-900 shadow-sm rounded-lg">
                                             {mes.content}
@@ -149,10 +145,10 @@ const ChatRoom = ({ chatId }: { chatId: string | null }) => {
                         />
                         <p className="text-gray-500">No chats found</p>
                     </div>
-                )}
+                )} */}
 
                 {/* Sender Message (Right-Aligned) */}
-                {/* <div className="flex justify-end">
+                <div className="flex justify-end">
                     <div className="flex items-start gap-4 flex-row-reverse max-w-lg">
                         <Avatar className="w-12 h-12">
                             <AvatarImage
@@ -171,7 +167,7 @@ const ChatRoom = ({ chatId }: { chatId: string | null }) => {
                             </span>
                         </div>
                     </div>
-                </div> */}
+                </div>
 
                 {/* <div className="flex justify-end">
                     <div className="flex items-start gap-4 flex-row-reverse max-w-lg">
@@ -199,7 +195,7 @@ const ChatRoom = ({ chatId }: { chatId: string | null }) => {
                 </div> */}
 
                 {/* Receiver Message (Left-Aligned) */}
-                {/* <div className="flex justify-start">
+                <div className="flex justify-start">
                     <div className="flex items-start gap-4 max-w-lg">
                         <Avatar className="w-12 h-12">
                             <AvatarImage
@@ -217,9 +213,9 @@ const ChatRoom = ({ chatId }: { chatId: string | null }) => {
                             </span>
                         </div>
                     </div>
-                </div> */}
+                </div>
 
-                {/* <div className="flex justify-start">
+                <div className="flex justify-start">
                     <div className="flex items-start gap-4 max-w-lg">
                         <Avatar className="w-12 h-12">
                             <AvatarImage
@@ -242,7 +238,7 @@ const ChatRoom = ({ chatId }: { chatId: string | null }) => {
                             </span>
                         </div>
                     </div>
-                </div> */}
+                </div>
             </CardContent>
 
             {/* Message Input */}

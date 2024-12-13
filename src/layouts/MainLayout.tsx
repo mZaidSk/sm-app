@@ -74,11 +74,6 @@ const MainLayout = () => {
         setShowSuggestions(false);
     };
 
-    const pendingRequests = [
-        { name: "John Doe", requestDate: "2024-12-05" },
-        { name: "Jane Smith", requestDate: "2024-12-07" },
-    ]; // Example pending requests
-
     const fetchPendingRequest = () => {
         dispatch(getPendingRequests());
     };

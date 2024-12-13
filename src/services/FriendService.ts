@@ -39,3 +39,7 @@ export const blockUserApi = ({
     friendId: string;
     reason: string;
 }) => instance.patch(`${url}/block/${friendId}`, { reason });
+
+// Remove Friend
+export const removeFriendApi = (requestId: string) =>
+    instance.delete(`${url}/request/${requestId}`);
