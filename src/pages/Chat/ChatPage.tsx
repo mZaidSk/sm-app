@@ -1,53 +1,92 @@
-import { useDispatch, useSelector } from "react-redux";
 import ChatList from "./components/ChatList";
 import ChatRoom from "./components/ChatRoom";
-import { AppDispatch, RootState } from "@/store/store";
-import useChatSocket from "@/hooks/useChatSocket";
-import { useEffect, useState } from "react";
-import {
-    fetchChatById,
-    fetchChatsByUserId,
-    fetchMessagesByChatId,
-} from "@/store/slice/ChatSlice";
-import websocket from "@/services/WebSocketService";
-import { addMessage } from "@/store/slice/ChatSocketSlice";
+import { SocketContext } from "@/contexts/SocketContext";
+import { useContext, useEffect, useState, useRef } from "react";
 
 const ChatPage = () => {
-    const dispatch = useDispatch<AppDispatch>();
-
-    // const userSelector = useSelector((state: RootState) => state.auth.user);
-    const [message, setMessage] = useState("");
-
-    const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
-    // console.log(userSelector);
-
-    websocket.connect(localStorage.getItem("token") || "");
+    const socketService = useContext(SocketContext);
+    const [chats, setChats] = useState<any>([]);
+    const [messages, setMessages] = useState<any>([]);
+    const [currentChat, setCurrentChat] = useState<any>(null);
+    const [newMessage, setNewMessage] = useState<string>(""); // State to handle new message input
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        dispatch(fetchChatsByUserId("806e3060-db33-4875-a1ce-3e39bdf68e35"));
-    }, [dispatch]);
+        if (!socketService) return;
+
+        // Load chats
+        socketService.emit("loadChats");
+        socketService.on("chatsLoaded", ({ chats }) => {
+            setChats(chats);
+        });
+
+        // Listen for new messages
+        socketService.on("receiveMessage", (message) => {
+            setMessages((prevMessages: any) => [...prevMessages, message]);
+        });
+
+        socketService.on("messageSent", ({ message }) => {
+            console.log(message);
+            setMessages((prevMessages: any) => [...prevMessages, message]);
+        });
+
+        return () => {
+            socketService.socket?.off("chatsLoaded");
+            socketService.socket?.off("receiveMessage");
+            socketService.socket?.off("messageSent");
+        };
+    }, [socketService]);
+
+    const joinChat = (chat: any) => {
+        if (!socketService) return;
+
+        socketService.emit("joinChat", { chatId: chat.id });
+        setCurrentChat(chat);
+
+        socketService.on("chatJoined", ({ messages }) => {
+            setMessages(messages);
+        });
+    };
+
+    const sendMessage = () => {
+        if (!socketService || !currentChat.id || !newMessage.trim()) return;
+
+        // setMessages((prevMessages: any) => [...prevMessages, newMessage]);
+
+        socketService.emit("sendMessage", {
+            chatId: currentChat.id,
+            content: newMessage,
+            messageType: "TEXT",
+        });
+
+        setNewMessage(""); // Clear the message input after sending
+    };
 
     useEffect(() => {
-        if (selectedChatId) {
-            dispatch(fetchMessagesByChatId(selectedChatId));
-            dispatch(fetchChatById(selectedChatId));
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
-    }, [dispatch, selectedChatId]);
-
-    // Initialize WebSocket listeners
+    }, [messages]);
 
     return (
         <div className="h-[calc(100vh-5rem)] flex flex-col">
             {/* Main Content */}
             <div className="flex flex-1 overflow-hidden">
-                {/* Left side: Chat Room */}
                 <div className="flex-1 border-r border-gray-300 h-full overflow-auto">
-                    <ChatRoom chatId={"selectedChatId"} />
+                    <ChatRoom
+                        chat={currentChat}
+                        messages={messages}
+                        newMessage={newMessage} // Pass newMessage to ChatRoom
+                        setNewMessage={setNewMessage} // Pass setNewMessage to ChatRoom
+                        sendMessage={sendMessage} // Pass sendMessage to ChatRoom
+                    />
                 </div>
 
-                {/* Right side: Chat List */}
                 <div className="flex-2 h-full p-0">
-                    <ChatList setChatId={setSelectedChatId} />
+                    <ChatList
+                        chats={chats}
+                        joinChat={(chat: any) => joinChat(chat)}
+                    />
                 </div>
             </div>
         </div>
