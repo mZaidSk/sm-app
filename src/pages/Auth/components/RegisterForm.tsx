@@ -114,6 +114,7 @@ const RegisterForm = () => {
               <ProfileImageComponent
                 profileImg={profileImg}
                 setProfileImg={setProfileImg}
+                isEditOn={true}
               />
 
               {/* fisrtname and surname */}
