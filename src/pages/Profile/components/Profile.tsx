@@ -28,9 +28,6 @@ const Profile: React.FC = () => {
     // Selectors
     const authUser = useSelector((state: RootState) => state.auth.user || {});
     const user = useSelector((state: RootState) => state.user.user || {});
-    const friendList = useSelector(
-        (state: RootState) => state.friend.friendList
-    );
     const isLoading = useSelector((state: RootState) => state.user.loading);
 
     // Fetch user and friend data
@@ -40,7 +37,6 @@ const Profile: React.FC = () => {
         } else {
             dispatch(getUser());
         }
-        dispatch(getFriendList({ userId: id || undefined }));
     }, [id, dispatch]);
 
     const handleFriendAction = async (action: string, requestId?: string) => {
@@ -212,13 +208,7 @@ const Profile: React.FC = () => {
                                                 : user.friends?.length || 0}
                                         </strong>
                                         {label === "Friends" ? (
-                                            <FriendsSheet
-                                                friendsList={transformFriendListData(
-                                                    friendList,
-                                                    user.id,
-                                                    new Set([id])
-                                                )}
-                                            />
+                                            <FriendsSheet id={user.id} />
                                         ) : (
                                             label
                                         )}

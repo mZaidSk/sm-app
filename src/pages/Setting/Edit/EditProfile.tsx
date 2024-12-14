@@ -1,29 +1,44 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { RootState } from "@/store/store";
 
 import React, { useRef, useState } from "react";
-
+import { useSelector } from "react-redux";
 
 const EditProfile = () => {
     const formatDate = (date: string) => {
-        const d = new Date(date); 
-        return d.toISOString().split('T')[0]; 
-    }
+        const d = new Date(date);
+        return d.toISOString().split("T")[0];
+    };
+    const authUser = useSelector((state: RootState) => state.auth.user);
     const [profile, setProfile] = useState({
         username: "lathika09",
         firstName: "Lathika",
         lastName: "Kotian",
         gender: "Female",
-        dob:formatDate("2003/11/09"),
+        dob: formatDate("2003/11/09"),
         bio: "Bio here",
-        email:"lathikakotian34@gmail.com",
-        phone:9324451591,
-        password:"12345",
+        email: "lathikakotian34@gmail.com",
+        phone: 9324451591,
+        password: "12345",
         profilePicture: "https://github.com/shadcn.png",
     });
 
@@ -51,27 +66,28 @@ const EditProfile = () => {
     };
 
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleProfilePictureChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
         const file = e.target.files?.[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setProfile((prev) => ({
                     ...prev,
-                    profilePicture: reader.result as string, 
+                    profilePicture: reader.result as string,
                 }));
             };
-            reader.readAsDataURL(file); 
+            reader.readAsDataURL(file);
         }
     };
 
     const handleChangeProfilePicture = () => {
         if (fileInputRef.current) {
-            fileInputRef.current.click(); 
+            fileInputRef.current.click();
         }
     };
 
-    
     return (
         <div className="rounded-lg px-6 py-4 bg-gray-50">
             <div className="flex flex-col gap-6">
@@ -80,14 +96,21 @@ const EditProfile = () => {
                     {/* Profile Header */}
                     <div className="flex flex-row items-center gap-6 pb-4 border-b">
                         <Avatar className="w-[15%] h-[15%]">
-                            <AvatarImage src={profile.profilePicture} alt="Profile Picture" />
-                            <AvatarFallback>{profile.username.charAt(0).toUpperCase()}</AvatarFallback>
+                            <AvatarImage
+                                src={authUser.profilePicture}
+                                alt="Profile Picture"
+                            />
+                            <AvatarFallback>
+                                {authUser.username.charAt(0).toUpperCase()}
+                            </AvatarFallback>
                         </Avatar>
                         <div>
                             <Label className="text-lg font-semibold">
-                                {profile.firstName} {profile.lastName}
+                                {authUser.firstName} {authUser.lastName}
                             </Label>
-                            <p className="text-sm text-gray-600">{profile.username}</p>
+                            <p className="text-sm text-gray-600">
+                                {authUser.username}
+                            </p>
                         </div>
                         {isEditing && (
                             <Button
@@ -105,7 +128,6 @@ const EditProfile = () => {
                             className="hidden"
                             onChange={handleProfilePictureChange}
                         />
-                        
                     </div>
 
                     {/* Profile Details */}
@@ -147,7 +169,9 @@ const EditProfile = () => {
                         <div className="flex gap-4 mb-4">
                             {/* Date of Birth */}
                             <div className="flex-1">
-                                <Label className="text-md font-semibold">Date of Birth</Label>
+                                <Label className="text-md font-semibold">
+                                    Date of Birth
+                                </Label>
                                 {isEditing ? (
                                     <Input
                                         type="date"
@@ -169,16 +193,27 @@ const EditProfile = () => {
                             </div>
                             {/* Gender */}
                             <div className="flex-1">
-                                <Label className="text-md font-semibold">Gender</Label>
+                                <Label className="text-md font-semibold">
+                                    Gender
+                                </Label>
                                 {isEditing ? (
-                                    <Select value={profile.gender} onValueChange={handleGenderChange}>
+                                    <Select
+                                        value={profile.gender}
+                                        onValueChange={handleGenderChange}
+                                    >
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select Gender" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Male">Male</SelectItem>
-                                            <SelectItem value="Female">Female</SelectItem>
-                                            <SelectItem value="Other">Other</SelectItem>
+                                            <SelectItem value="Male">
+                                                Male
+                                            </SelectItem>
+                                            <SelectItem value="Female">
+                                                Female
+                                            </SelectItem>
+                                            <SelectItem value="Other">
+                                                Other
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
                                 ) : (
@@ -187,16 +222,15 @@ const EditProfile = () => {
                                     </p>
                                 )}
                             </div>
-
-                            
                         </div>
-
                     </div>
                     {/* Email and Phone Number */}
                     <div className="flex gap-4 mb-4">
                         {/* Email */}
                         <div className="flex-1">
-                            <Label className="text-md font-semibold">Email</Label>
+                            <Label className="text-md font-semibold">
+                                Email
+                            </Label>
                             {isEditing ? (
                                 <Input
                                     type="email"
@@ -215,7 +249,9 @@ const EditProfile = () => {
 
                         {/* Phone Number */}
                         <div className="flex-1">
-                            <Label className="text-md font-semibold">Phone Number</Label>
+                            <Label className="text-md font-semibold">
+                                Phone Number
+                            </Label>
                             {isEditing ? (
                                 <Input
                                     type="tel"
@@ -235,7 +271,9 @@ const EditProfile = () => {
 
                     {/* Password */}
                     <div className="mb-4">
-                        <Label className="text-md font-semibold">Password</Label>
+                        <Label className="text-md font-semibold">
+                            Password
+                        </Label>
                         {isEditing ? (
                             <Input
                                 type="password"
@@ -265,7 +303,9 @@ const EditProfile = () => {
                                 <Button onClick={handleSave}>Save</Button>
                             </>
                         ) : (
-                            <Button onClick={() => setIsEditing(true)}>Edit</Button>
+                            <Button onClick={() => setIsEditing(true)}>
+                                Edit
+                            </Button>
                         )}
                     </div>
                 </div>

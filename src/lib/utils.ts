@@ -15,6 +15,8 @@ export const transformFriendListData = (
         const otherUser =
             friend.user.id === loggedInUserId ? friend.friend : friend.user;
         return {
+            id: friend.id,
+            friendId: otherUser.id,
             username: otherUser.username,
             name: `${otherUser.firstName}`,
             profileImage: otherUser.profilePictureUrl,

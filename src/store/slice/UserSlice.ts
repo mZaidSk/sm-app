@@ -71,13 +71,10 @@ const userSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(
-                getUser.fulfilled,
-                (state, action: PayloadAction<any[]>) => {
-                    state.loading = false;
-                    state.user = action.payload;
-                }
-            )
+            .addCase(getUser.fulfilled, (state, action: PayloadAction<any>) => {
+                state.loading = false;
+                state.user = action.payload?.data;
+            })
             .addCase(getUser.rejected, (state, action: PayloadAction<any>) => {
                 state.loading = false;
                 state.error = action.payload || "Failed to fetch users";
@@ -88,9 +85,9 @@ const userSlice = createSlice({
             })
             .addCase(
                 getUserByUsername.fulfilled,
-                (state, action: PayloadAction<any[]>) => {
+                (state, action: PayloadAction<any>) => {
                     state.loading = false;
-                    state.searchUser = action.payload;
+                    state.searchUser = action.payload.data;
                 }
             )
             .addCase(
@@ -107,9 +104,9 @@ const userSlice = createSlice({
             })
             .addCase(
                 getUserById.fulfilled,
-                (state, action: PayloadAction<any[]>) => {
+                (state, action: PayloadAction<any>) => {
                     state.loading = false;
-                    state.user = action.payload;
+                    state.user = action.payload.data;
                 }
             )
             .addCase(
