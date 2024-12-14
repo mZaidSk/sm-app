@@ -12,24 +12,42 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import ProfileImageComponent from "@/pages/Auth/components/ProfileImageComponent";
-import React, { useRef, useState } from "react";
+import { getFriendList } from "@/store/slice/FriendSlice";
+import { getUser, getUserById } from "@/store/slice/UserSlice";
+import { AppDispatch, RootState } from "@/store/store";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const ProfileEdit = () => {
+  const { id } = useParams<{ id: string }>();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const authUser = useSelector((state: RootState) => state.auth.user || {});
+
+  // Fetch user
+  useEffect(() => {
+    if (id) {
+      dispatch(getUserById({ id }));
+    } else {
+      dispatch(getUser());
+    }
+  }, [id, dispatch]);
+
   const formatDate = (date: string) => {
     const d = new Date(date);
     return d.toISOString().split("T")[0];
   };
   const [profile, setProfile] = useState({
-    username: "lathika09",
-    firstName: "Lathika",
-    lastName: "Kotian",
-    gender: "Female",
-    dob: formatDate("2003/11/09"),
-    bio: "Bio here",
-    email: "lathikakotian34@gmail.com",
-    phone: 9324451591,
-    password: "12345",
-    profilePicture: "https://github.com/shadcn.png",
+    username: authUser.username || "",
+    firstName: authUser.firstName || "",
+    lastName: authUser.lastName || "",
+    gender: authUser.gender || "Other",
+    dob: authUser.dob ? formatDate(authUser.dob) : "",
+    bio: authUser.bio || "",
+    email: authUser.email || "",
+    phoneNo: authUser.phoneNo || "",
+    profilePicture: authUser.profilePictureUrl || "",
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -84,6 +102,7 @@ const ProfileEdit = () => {
             <ProfileImageComponent
               profileImg={profileImg}
               setProfileImg={setProfileImg}
+              isEditOn={isEditing}
             />
             <div>
               <Label className="text-lg font-semibold">
@@ -205,14 +224,14 @@ const ProfileEdit = () => {
                 <Input
                   type="tel"
                   name="phone"
-                  value={profile.phone || ""}
+                  value={profile.phoneNo || ""}
                   onChange={handleInputChange}
                   placeholder="Enter your phone number"
                   className="w-full"
                 />
               ) : (
                 <p className="p-2 border rounded text-gray-700">
-                  {profile.phone || "Not set"}
+                  {profile.phoneNo || "Not set"}
                 </p>
               )}
             </div>

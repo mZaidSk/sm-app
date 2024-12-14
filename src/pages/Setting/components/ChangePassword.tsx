@@ -1,6 +1,7 @@
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Eye, EyeOff, Terminal } from "lucide-react";
-import React, { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface ChangePasswordProps {
   password: string;
@@ -14,45 +15,43 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ password }) => {
   const [passwordMismatchError, setPasswordMismatchError] = useState(false);
   const [passwordChangeSuccess, setPasswordChangeSuccess] = useState(false);
 
-  // States for showing/hiding passwords
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
 
-  const handleCurrentPasswordChange = (e: any) => {
-    setCurrentPassword(e.target.value);
-    if (e.target.value === password) {
-      setIsCurrentPasswordValid(true);
-      setPasswordMismatchError(false);
-    } else {
-      setIsCurrentPasswordValid(false);
-    }
+  const handleCurrentPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const input = e.target.value;
+    setCurrentPassword(input);
+    setIsCurrentPasswordValid(input === password);
   };
 
-  const handleNewPasswordChange = (e: any) => {
+  const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
     if (e.target.value === confirmNewPassword) {
       setPasswordMismatchError(false);
     }
   };
 
-  const handleConfirmNewPasswordChange = (e: any) => {
-    setConfirmNewPassword(e.target.value);
-    if (e.target.value === newPassword) {
-      setPasswordMismatchError(false);
-    } else {
-      setPasswordMismatchError(true);
-    }
+  const handleConfirmNewPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const input = e.target.value;
+    setConfirmNewPassword(input);
+    setPasswordMismatchError(input !== newPassword);
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (newPassword === confirmNewPassword && newPassword !== "") {
+    if (
+      isCurrentPasswordValid &&
+      newPassword === confirmNewPassword &&
+      newPassword
+    ) {
       setPasswordChangeSuccess(true);
-      setTimeout(() => {
-        setPasswordChangeSuccess(false);
-      }, 3000);
+      setTimeout(() => setPasswordChangeSuccess(false), 3000);
       setCurrentPassword("");
       setNewPassword("");
       setConfirmNewPassword("");
@@ -62,99 +61,121 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ password }) => {
   };
 
   return (
-    <div className="max-w-lg mx-auto my-10 p-6 rounded-lg shadow-lg relative">
+    <div className="max-w-lg mx-auto my-10 p-6 rounded-lg shadow-lg bg-white">
       <h2 className="text-2xl font-bold text-center mb-6">Change Password</h2>
-
-      {/* current password */}
-      <div className="mb-4">
-        <label htmlFor="current-password" className="block text-sm font-medium text-gray-700">
-          Current Password
-        </label>
-        <div className="relative">
-          <input
-            type={showCurrentPassword ? "text" : "password"}
-            id="current-password"
-            value={currentPassword}
-            onChange={handleCurrentPasswordChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            type="button"
-            onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-            className="absolute right-3 top-2 text-gray-500"
+      <form onSubmit={handleSubmit}>
+        {/* Current Password */}
+        <div className="mb-4">
+          <label
+            htmlFor="current-password"
+            className="block text-sm font-medium text-gray-700"
           >
-            {showCurrentPassword ?<EyeOff/> : <Eye/>}
-          </button>
+            Current Password
+          </label>
+          <div className="relative">
+            <Input
+              type={showCurrentPassword ? "text" : "password"}
+              id="current-password"
+              value={currentPassword}
+              onChange={handleCurrentPasswordChange}
+              className="mt-1 block w-full px-4 py-3 border rounded-md "
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+              className="absolute right-3 top-2 text-gray-500"
+            >
+              {showCurrentPassword ? <EyeOff /> : <Eye />}
+            </button>
+          </div>
+          {!isCurrentPasswordValid && currentPassword && (
+            <p className="text-red-500 text-sm mt-1">
+              Current password is incorrect.
+            </p>
+          )}
         </div>
-        {!isCurrentPasswordValid && currentPassword !== "" && (
-          <p className="text-red-500 text-sm mt-1">Current password does not match.</p>
+
+        {/* New Password */}
+        {isCurrentPasswordValid && (
+          <>
+            <div className="mb-4">
+              <Label
+                htmlFor="new-password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                New Password
+              </Label>
+              <div className="relative">
+                <Input
+                  type={showNewPassword ? "text" : "password"}
+                  id="new-password"
+                  value={newPassword}
+                  onChange={handleNewPasswordChange}
+                  className="mt-1 block w-full px-4 py-3 border rounded-md "
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  className="absolute right-3 top-2 text-gray-500"
+                >
+                  {showNewPassword ? <EyeOff /> : <Eye />}
+                </button>
+              </div>
+            </div>
+
+            {/* Confirm New Password */}
+            <div className="mb-4">
+              <label
+                htmlFor="confirm-new-password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Confirm New Password
+              </label>
+              <div className="relative">
+                <Input
+                  type={showConfirmNewPassword ? "text" : "password"}
+                  id="confirm-new-password"
+                  value={confirmNewPassword}
+                  onChange={handleConfirmNewPasswordChange}
+                  className="mt-1 block w-full px-4 py-3 border rounded-md"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowConfirmNewPassword(!showConfirmNewPassword)
+                  }
+                  className="absolute right-3 top-2 text-gray-500"
+                >
+                  {showConfirmNewPassword ? <EyeOff /> : <Eye />}
+                </button>
+              </div>
+              {passwordMismatchError && (
+                <p className="text-red-500 text-sm mt-1">
+                  Passwords do not match.
+                </p>
+              )}
+            </div>
+          </>
         )}
-      </div>
 
-      {/* new password */}
-      {isCurrentPasswordValid && (
-        <>
-          <div className="mb-4">
-            <label htmlFor="new-password" className="block text-sm font-medium text-gray-700">
-              New Password
-            </label>
-            <div className="relative">
-              <input
-                type={showNewPassword ? "text" : "password"}
-                id="new-password"
-                value={newPassword}
-                onChange={handleNewPasswordChange}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                type="button"
-                onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-3 top-2 text-gray-500"
-              >
-                {showNewPassword ? <EyeOff/> : <Eye/>}
-              </button>
-            </div>
-          </div>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="w-full bg-zinc-700 text-white py-2 my-2 rounded-md hover:bg-zinc-900"
+          disabled={
+            !isCurrentPasswordValid || passwordMismatchError || !newPassword
+          }
+        >
+          Change Password
+        </button>
+      </form>
 
-          {/* confirm new password */}
-          <div className="mb-4">
-            <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
-              Confirm New Password
-            </label>
-            <div className="relative">
-              <input
-                type={showConfirmNewPassword ? "text" : "password"}
-                id="confirm-password"
-                value={confirmNewPassword}
-                onChange={handleConfirmNewPasswordChange}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
-                className="absolute right-3 top-2 text-gray-500"
-              >
-                {showConfirmNewPassword ? <EyeOff/> : <Eye/>}
-              </button>
-            </div>
-            {passwordMismatchError && (
-              <p className="text-red-500 text-sm mt-1">Passwords do not match.</p>
-            )}
-          </div>
-        </>
-      )}
-
-      <button
-        onClick={handleSubmit}
-        className="w-full bg-zinc-700 text-white py-2 rounded-md hover:bg-zinc-900"
-        disabled={!isCurrentPasswordValid || passwordMismatchError || newPassword === ""}
-      >
-        Change Password
-      </button>
-
-      {/* Success message */}
+      {/* Success Alert */}
       {passwordChangeSuccess && (
-        <div className="absolute top-28 right-24 mt-4 bg-zinc-500 border text-white px-6 py-2 rounded-lg shadow-lg">
+        <div className="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded-md">
           Password changed successfully!
         </div>
       )}
