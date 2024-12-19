@@ -18,6 +18,7 @@ interface PostHeaderProps {
   username: string;
   profileImage: string;
   isFollowing: boolean;
+  isMe: boolean;
 }
 
 const PostHeader: React.FC<PostHeaderProps> = ({
@@ -26,6 +27,7 @@ const PostHeader: React.FC<PostHeaderProps> = ({
   username,
   profileImage,
   isFollowing,
+  isMe,
 }) => {
   const authUserSelector = useSelector((state: RootState) => state.auth.user);
 
@@ -44,29 +46,31 @@ const PostHeader: React.FC<PostHeaderProps> = ({
       </div>
 
       {/* Dropdown Menu for Follow and Report options */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button className="p-2 rounded-full hover:bg-gray-200">
-            <EllipsisVertical />
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>Options</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            {isFollowing ? (
-              <Users className="mr-2" />
-            ) : (
-              <Plus className="mr-2" />
-            )}
-            <span>{isFollowing ? "Unfollow" : "Follow"}</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Flag className="mr-2" />
-            <span>Report</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      {!isMe && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="p-2 rounded-full hover:bg-gray-200">
+              <EllipsisVertical />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuLabel>Options</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              {isFollowing ? (
+                <Users className="mr-2" />
+              ) : (
+                <Plus className="mr-2" />
+              )}
+              <span>{isFollowing ? "Unfollow" : "Follow"}</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Flag className="mr-2" />
+              <span>Report</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const SOCKET_URL = "http://localhost:3000";
+const SOCKET_URL = "https://sm-api-rtii.onrender.com";
 
 class SocketService {
     public socket: any = null; // Declare socket as 'any' to bypass type checks
